@@ -1,2 +1,5 @@
 .Rproj.user/*
 faustutils.Rproj
+.Rproj.user
+.Rhistory
+inst/extdata/faustData/**
