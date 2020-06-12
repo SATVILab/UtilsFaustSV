@@ -10,3 +10,9 @@ Description: Provides functions to extract populations identified
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Imports: 
+    flowCore,
+    flowWorkspace,
+    stringr
+Suggests: 
+    testthat
