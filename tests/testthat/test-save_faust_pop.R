@@ -1,8 +1,8 @@
-if(FALSE){
-  # ================================
-  # Create data for tests
-  # ================================
+# ================================
+# Create data for tests
+# ================================
 
+.create_data_for_tests <- function(){
   # Note that initial GatingSet was gs_cytof_acs
 
   # directories
@@ -61,10 +61,12 @@ if(FALSE){
   flowWorkspace::save_gs(gs_test, path = DataPackageR::project_path('tests/testthat/gs_test'))
 
 }
-library(flowCore); library(flowWorkspace); library(stringr)
-project_path <- DataPackageR::project_extdata_path()
 
-sample <- NULL; trans <- NULL; pop <- list("CD8-IgD" = 2)
+if(FALSE) .create_data_for_tests() # run only if need be
+
+# ================================
+# Test save_faust_pop function
+# ================================
 
 testthat::test_that("save_faust_pop works correctly",{
 

@@ -40,8 +40,6 @@ save_faust_pop <- function(project_path,
     stop("Each of project_path, gs and pop parameters must have arguments.")
   }
 
-  if(!is.list(pop)) stop('pop must be a list')
-
   # =============================
   # Preparation
   # =============================
