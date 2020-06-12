@@ -16,3 +16,4 @@ Imports:
     stringr
 Suggests: 
     testthat
+RoxygenNote: 7.1.0

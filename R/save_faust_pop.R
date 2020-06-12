@@ -17,13 +17,14 @@
 #' @param trans function. If supplied, this function is applied to the expression data.
 #' Useful for back-transformation, as the original
 #' GatingSet . If \code{NULL}, then no transformation is applied. Default is \code{NULL}.
-
+#' Not working at the moment.
 #' @param saveFCS Boolean. If \code{TRUE}, then FCS files of the selected cell population(s)
 #' and sample(s) are saved to project_path/faustData/fcsData. Default is \code{FALSE}.
 #' population of all the selected samplesare saved to project_path/faustData/gsData. Default is \code{FALSE}.
 #'
 #' @return \code{invisible(TRUE)}. Side effect is the saved FCS file.
-#' @example save_faust_pop(project_path = )
+#' @examples save_faust_pop(project_path = "", pop = list("CD3" = 2),
+#' gs = gs, sample = 1)
 #' @export
 save_faust_pop <- function(project_path,
                            pop,
@@ -96,7 +97,7 @@ save_faust_pop <- function(project_path,
 
 #' @title Save FAUST subset as an FCS file
 #'
-#' @inheritParams save_faust_pop # project_path, gs, pop
+#' @inheritParams save_faust_pop
 #' @param sel_sample \code{character vector}. Character vector specifying
 #' the names of the samples (as saved by FAUST as folder names in the analysis map
 #' and equivalent to \code{gs[[i]]@name} where i is an index in \code{gs}.) that
@@ -141,7 +142,7 @@ save_faust_pop <- function(project_path,
 #' @param sample \code{character}. Name of sample, as found in directory
 #' <project_path>/faustData/sampleData/.
 #' @param ex \code{matrix}. Matrix containing marker expression values for \code{sample}.
-#' @inheritParams save_faust_pop # project_path, pop
+#' @inheritParams save_faust_pop
 #'
 #' @return Numeric matrix.
 .get_faust_pop <- function(ex, sample, project_path, pop){
@@ -159,7 +160,7 @@ save_faust_pop <- function(project_path,
 
 #' Return expression matrix for cells that match a single FAUST label
 #'
-#' @inheritParams save_faust_pop_as_fcs pop
+#' @inheritParams save_faust_pop
 #' @param ex \code{numeric matrix}. Contains expression data.
 #' @param faust_ann \code{character vector}. Specifies FAUST annotation for
 #' each cell in \code{ex}.
@@ -184,7 +185,8 @@ save_faust_pop <- function(project_path,
 
 #' @title Check if FAUST annotation has a given level for a set of markers
 #'
-#' @inheritParmas .get_pop_in_faust # faust_ann, ex
+#' @inheritParams .get_faust_pop
+#' @inheritParams .get_faust_pop_pop
 #' @param pop \code{named character vector}. Names are marker names and values are
 #' levels of marker. Values must be of the form or "<num_1>" or "<num_1>~<num_2>", where
 #' <num_1> is the level for the marker and <num_2> is the total number of levels for
@@ -205,6 +207,10 @@ save_faust_pop <- function(project_path,
 }
 
 #' @title Check if FAUST annotation has as given level for a given marker
+#'
+#' @inheritParams .get_faust_pop_pop
+#' @param marker character. Name of marker.
+#' @param level character. Level of marker, e.g. "1", "2" or "3".
 .is_faust_ann_a_match_for_marker <- function(faust_ann, marker, level){
   faust_ann_level_loc_start <- stringr::str_locate(faust_ann[[1]], marker)[,"end"][[1]] + 2
   faust_ann_level <- stringr::str_sub(faust_ann[[1]], faust_ann_level_loc_start, faust_ann_level_loc_start + stringr::str_length(level) - 1)
