@@ -42,7 +42,8 @@ it is set to \code{max(5, n_pop * 1.25)},
 where \code{n_pop} is the number of sub-populations in \code{pop}.}
 }
 \description{
-Plot counts of FAUST pops by sample
+Saves plots of counts to \code{project_path/faustData/plotData/pop_stats}
+for specified FAUST-identified subsets.
 }
 \examples{
 project_path <- usethis::proj_path(ext = "/inst/extdata")

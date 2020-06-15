@@ -40,6 +40,7 @@
 #'  "TCRgd-CD19" = "-"))
 #' plot_faust_count(project_path = project_path,
 #' pop = pop)
+#' @export
 plot_faust_count <- function(project_path,
                              pop,
                              font_size = 10,
