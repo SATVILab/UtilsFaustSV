@@ -2,5 +2,9 @@
 
 export(get_faust_markers_and_levels)
 export(save_faust_pop)
+import(ggplot2)
+import(scales)
+importFrom(magrittr,"%<>%")
+importFrom(magrittr,"%>%")
 importFrom(stringr,str_locate)
 importFrom(stringr,str_sub)

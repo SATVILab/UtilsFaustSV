@@ -13,7 +13,13 @@ LazyData: true
 Imports: 
     flowCore,
     flowWorkspace,
-    stringr
+    stringr,
+    ggplot2,
+    magrittr,
+    dplyr,
+    tidyr,
+    cowplot,
+    purrr
 Suggests: 
     testthat
 RoxygenNote: 7.1.0
