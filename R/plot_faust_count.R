@@ -1,5 +1,8 @@
 #' @title Plot counts of FAUST pops by sample
 #'
+#' @description Saves plots of counts to \code{project_path/faustData/plotData/pop_stats}
+#' for specified FAUST-identified subsets.
+#'
 #' @inheritParams save_faust_pop
 #' @param pop \code{list} or \code{named character vector}. If a \code{character vector},
 #' then counts of all subsets matching the set of marker levels are plotted.
@@ -50,6 +53,9 @@ plot_faust_count <- function(project_path,
   # =======================================
 
   # check that pop is either a character vector or a list of character vectors
+  if(is.character(pop)){
+    if(is.null(names(pop))) stop("Character vectors in pop must be named. Names are the markers (e.g. CD4) and values are the FAUST annotations (e.g. '+' or '-').")
+  }
   if(!is.character(pop)){
     if(!is.list(pop)) stop('pop must be either a list of character vectors or a character vector.')
     if(!all(purrr::map_lgl(pop, function(x) is.character(x)))){
@@ -102,7 +108,7 @@ plot_faust_count <- function(project_path,
   # Subsetting
   # ==============================
 
-  count_tbl_subset <- .get_pop_counts(data = count_tbl,
+  count_tbl_subset <- get_pop_counts(data = count_tbl,
                                       pop = pop,
                                       dem_col = c('sample', 'exp_unit', 'tot_count'))
 
@@ -158,16 +164,16 @@ plot_faust_count <- function(project_path,
     labs(title = title)
 
   # save plot
-  if(save){
-    dir_save <- file.path(dir_faust, 'plotData', 'pop_stats')
-    if(!dir.exists(dir_save)) dir.create(dir_save, recursive = TRUE)
-    n_pop <- ncol(count_tbl_subset) - 3
-    p_height <- ifelse(is.null(p_height), max(5, n_pop * 1.25), p_height)
-    p_width <- ifelse(is.null(p_width), 40, p_width)
-    cowplot::ggsave2(filename = file.path(dir_save, paste0(title, ".png")),
-                     plot = p,
-                     height = p_height, width = p_width, units = 'cm')
-  }
+  dir_save <- file.path(dir_faust, 'plotData', 'pop_stats')
+  if(!dir.exists(dir_save)) dir.create(dir_save, recursive = TRUE)
+  n_pop <- ncol(count_tbl_subset) - 3
+  p_height <- ifelse(is.null(p_height), max(5, n_pop * 1.25), p_height)
+  p_width <- ifelse(is.null(p_width), 40, p_width)
+  cowplot::ggsave2(filename = file.path(dir_save, paste0(title, ".png")),
+                   plot = p,
+                   height = p_height, width = p_width, units = 'cm')
+
+  invisible(TRUE)
 }
 
 #' @title Get a searchable version of the marker levels
@@ -212,72 +218,3 @@ trans_asinh <- scales::trans_new('trans_asinh',
     which
 }
 
-#' @title Get counts of subsets identified by FAUST
-#'
-#' @param data dataframe. Dataframe where columns specify counts.
-#' @param pop \code{named character vector} or \code{list}. If a \code{character vector},
-#' then names specify markers and values specify levels, e.g. c("CD4" = "-", "CD8" = "+") means
-#' that we are interested in FAUST subsets annotated "CD4-CD8+". Counts of all subsets with these
-#' levels for these markers are plotted separately.
-#' If a \code{list}, then each element must be a character vector as above. For a given list element,
-#' instead of all plotting all subsets individually that have the correct level for the specified markers,
-#' we sum over all the subsets matching the specified annotation and plot the final count.
-#' @param dem_col \code{character vector}. Specifies names of columns in \code{data} that we wish
-#' to keep, regardless of if they match a FAUST annotation.
-#'
-#' @return A dataframe with columns as specified in \code{dem_col}, \code{pop} (population name) and
-#' \code{count} (number of cells in population).
-#'
-#' @examples
-#' .get_pop_counts(data = count_tbl, pop = c("CD4"  = "-", "CD8"  = "+"))
-#' .get_pop_counts(data = count_tbl, pop = list(c("CD4"  = "-", "CD8"  = "+"), c("CD8" = "-", 'CD4" = "+")))
-.get_pop_counts <- function(data, pop, dem_col = c('sample', 'exp_unit', 'tot_count')){
-
-  # get columns whose indices match the "demographic" info
-  dem_col_ind_vec <- which(colnames(data) %in% dem_col)
-  data_dem <- data[, dem_col_ind_vec, drop = FALSE]
-  # if a single annotation set is all that's specified, return all subsets matching
-  # it individually
-  if(is.character(pop)){
-    pop_col_ind_vec <- .get_pop_match_ind(data = data, pop = pop)
-    pop_col_name_vec <- colnames(data[,pop_col_ind_vec])
-    # for each column identified, remove each annotation specifying
-    # the main subset of which it's a part
-    for(i in seq_along(pop_col_name_vec)){
-      for(j in seq_along(pop)){
-        pop_col_name_vec[i] <- stringr::str_remove(pop_col_name_vec[i],
-                                                   paste0(names(pop)[[j]],
-                                                          "[[",
-                                                          pop[j],
-                                                          "]]"))
-      }
-    }
-    # select only columns found to match annotation set
-    data_resp <- data[,pop_col_ind_vec, drop = FALSE]
-    # rename columns as per above
-    colnames(data_resp) <- pop_col_name_vec
-    # join dem columns to response columns
-    data_out <- dplyr::bind_cols(data_dem, data_resp)
-    return(data_out)
-
-  } else if(is.list(pop)){
-    # if multiple pops are specified, sum within each
-    data_out <- data_dem
-    for(pop_curr in pop){
-      # get columns matching current annotation set
-      pop_col_ind_vec <- .get_pop_match_ind(data = data, pop = pop_curr)
-
-      # add up counts over all population subsets identified
-      count_vec <- rep(0, nrow(data_dem))
-      for(pop_ind in pop_col_ind_vec){
-        count_vec <- count_vec + data[[pop_ind]]
-      }
-
-      # append counts to dataframe
-      pop_name <- paste0(.collapse_pop(pop = pop_curr, search = FALSE),
-                         collapse = "")
-      data_out[[pop_name]] <- count_vec
-    }
-    return(data_out)
-  }
-}

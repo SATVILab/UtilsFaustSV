@@ -30,7 +30,7 @@ library(faustutils)
 First save the directory FAUST saved results to:
 
 ``` r
-# set the FAUST project 
+# set the FAUST project path
 proj_path <- usethis::proj_path('tests/testthat')
 #> √ Setting active project to 'C:/Users/migue/OneDrive - University of Cape Town/Work/PhD/Code/faustutils'
 ```
@@ -54,4 +54,29 @@ of the markers (not run):
 ``` r
 save_faust_pop(project_path = proj_path, pop = list("CD3" = 2, "CD4" = 2), 
                gs = gs) # set gs to be the GatingSet FAUST clustered
+```
+
+You can get a table of counts of FAUST-identified clusters defined using
+only a subset of the markers used (not run):
+
+``` r
+get_pop_counts(project_path = proj_path, 
+               pop = c("CD4" = "-", "CD8" = "+"))
+```
+
+You can save plots of counts of FAUST-identified clusters, where the
+clusters are defined using only a subset of the markers (not run):
+
+``` r
+# plot all subsets that match these annotations individually
+pop <- c("CD3" = "+", "CD4" = "+", "CD8-IgD" = "-")
+plot_faust_count(project_path = proj_path,
+                 pop = pop)
+
+# plot total counts of subsets that match these annotations
+# within each list element
+pop <- list(c("CD3" = "+", "CD4" = "+", "CD8-IgD" = "-"),
+           c("CD3" = "+", "CD4" = "-", "CD8-IgD" = "+"))
+plot_faust_count(project_path = proj_path,
+                 pop = pop)
 ```
