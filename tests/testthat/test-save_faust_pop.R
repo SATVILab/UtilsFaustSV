@@ -172,3 +172,16 @@ testthat::test_that("save_faust_pop works correctly",{
 
 })
 
+test_that(".is_faust_ann_a_match_for_marker works when first entry is 0_0_0_0_0", {
+  faust_ann <- data.frame(x = c("0_0_0_0_0", "CD3~1~", "CD3~2~"))
+  match_vec <- .is_faust_ann_a_match_for_marker(faust_ann = faust_ann, marker = "CD3", level = "1")
+  expect_identical(match_vec, c(FALSE, TRUE, FALSE))
+})
+
+test_that(".is_faust_ann_a_match_for_marker works when all entries are 0_0_0_0_0", {
+  faust_ann <- data.frame(x = c("0_0_0_0_0", "0_0_0_0_0", "0_0_0_0_0"))
+  match_vec <- .is_faust_ann_a_match_for_marker(faust_ann = faust_ann, marker = "CD3", level = "1")
+  expect_identical(match_vec, rep(FALSE, 3))
+})
+
+

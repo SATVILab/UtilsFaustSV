@@ -147,7 +147,7 @@ save_faust_pop <- function(project_path,
   # annotations for each cell for a given sample
   path_ann <- file.path(project_path, "faustData", "sampleData",
                         sample, "faustAnnotation.csv")
-  if(!file.exists(path_ann)) stop(paste0("no faust annotation file found for sample", sample))
+  if(!file.exists(path_ann)) stop(paste0("no faust annotation file found for sample ", sample))
   faust_ann_tbl <- utils::read.table(file = path_ann,
                                      header = FALSE, sep = "`",
                                      stringsAsFactors = FALSE)[,1,drop = FALSE]
@@ -210,7 +210,13 @@ save_faust_pop <- function(project_path,
 #' @param marker character. Name of marker.
 #' @param level character. Level of marker, e.g. "1", "2" or "3".
 .is_faust_ann_a_match_for_marker <- function(faust_ann, marker, level){
-  faust_ann_level_loc_start <- stringr::str_locate(faust_ann[[1]], marker)[,"end"][[1]] + 2
+  k <- 1
+  while(faust_ann[[1]][k] == "0_0_0_0_0"){
+    if(k >= nrow(faust_ann)) return(rep(FALSE, nrow(faust_ann)))
+    k <- k + 1
+  }
+  typical_cluster_annotation <- faust_ann[[1]][k]
+  faust_ann_level_loc_start <- stringr::str_locate(typical_cluster_annotation, marker)[,"end"][[1]] + 2
   faust_ann_level <- stringr::str_sub(faust_ann[[1]], faust_ann_level_loc_start, faust_ann_level_loc_start + stringr::str_length(level) - 1)
   level == faust_ann_level
 }
