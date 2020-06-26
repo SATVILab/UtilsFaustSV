@@ -22,16 +22,31 @@
 #' "hms", "identity", "log", "log10", "log1p", "log2", "logit", "modulus",
 #' "probability", "probit", "pseudo_log", "reciprocal", "reverse", "sqrt" and
 #' "time". Default is \code{asinh}.
+#' @param exhaustive logical. If \code{TRUE}, then counts are taken from the exhaustive FAUST count matrix
+#' rather than the count matrix after excluding subsets that don't appear in sufficiently many
+#' experimental units. Default is \code{FALSE}.
+#'
+#' @details
+#' The key parameter is \code{pop}. If \code{pop} is a list,
+#' then each element is treated as a population for which counts
+#' are required on aggregate (rather than for individual subsets
+#' of that population). If \code{pop} is a character vector, then
+#' it is treated as a population for which counts are required for
+#' individual subsets.
+#'
 #' @import ggplot2
 #' @import scales
 #' @importFrom magrittr %>% %<>%
 #' @examples
 #' project_path <- usethis::proj_path(ext = "/inst/extdata")
+#' # plot all subsets of pop, as it is a character vector
 #' pop <- c("CD3" = "+", "CD4" = "+", "CD8-IgD" = "-",
 #'          "CD20" = "-", "CD33" = "-", "CD14" = "-",
 #'          "TCRgd-CD19" = "-")
 #' plot_faust_count(project_path = project_path,
 #'                  pop = pop)
+#' # plot counts of cells matching annotation of each
+#' # element in pop, as pop is a list
 #' pop <- list(c("CD3" = "+", "CD4" = "+", "CD8-IgD" = "-",
 #' "CD20" = "-", "CD33" = "-", "CD14" = "-",
 #' "TCRgd-CD19" = "-"),
@@ -48,7 +63,8 @@ plot_faust_count <- function(project_path,
                              breaks = NULL,
                              trans_x = 'asinh',
                              p_width = NULL,
-                             p_height = NULL){
+                             p_height = NULL,
+                             exhaustive = FALSE){
   # =======================================
   # Checks
   # =======================================
@@ -76,7 +92,9 @@ plot_faust_count <- function(project_path,
   dir_faust <- file.path(project_path, 'faustData')
 
   # raw data
-  count_mat <- readRDS(file.path(dir_faust, 'faustCountMatrix.rds'))
+  count_mat_name <- ifelse(exhaustive, 'exhaustiveFaustCountMatrix.rds',
+                           'faustCountMatrix.rds')
+  count_mat <- readRDS(file.path(dir_faust, count_mat_name))
   analysis_map <- readRDS(file.path(dir_faust, 'metaData',
                                     'analysisMap.rds')) %>%
     tibble::as_tibble()
@@ -166,11 +184,15 @@ plot_faust_count <- function(project_path,
 
   # save plot
   dir_save <- file.path(dir_faust, 'plotData', 'pop_stats')
+  if(exhaustive) dir_save <- paste0(dir_save, "-exhaustive")
   if(!dir.exists(dir_save)) dir.create(dir_save, recursive = TRUE)
+  fn <-  file.path(dir_save, paste0(title, ".png"))
+  fn <- suppressWarnings(normalizePath(fn))
+  if(file.exists(fn)) file.remove(fn)
   n_pop <- ncol(count_tbl_subset) - 3
   p_height <- ifelse(is.null(p_height), max(5, n_pop * 1.25), p_height)
   p_width <- ifelse(is.null(p_width), 40, p_width)
-  cowplot::ggsave2(filename = file.path(dir_save, paste0(title, ".png")),
+  cowplot::ggsave2(filename = fn,
                    plot = p,
                    height = p_height, width = p_width, units = 'cm')
 

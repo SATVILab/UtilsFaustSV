@@ -12,7 +12,8 @@ plot_faust_count(
   breaks = NULL,
   trans_x = "asinh",
   p_width = NULL,
-  p_height = NULL
+  p_height = NULL,
+  exhaustive = FALSE
 )
 }
 \arguments{
@@ -40,18 +41,33 @@ transformations include "asinh", "asn", "atanh", "boxcox", "date", "exp",
 \item{p_height}{\code{numeric}. Height of saved plot in cm. If \code{NULL}, then
 it is set to \code{max(5, n_pop * 1.25)},
 where \code{n_pop} is the number of sub-populations in \code{pop}.}
+
+\item{exhaustive}{logical. If \code{TRUE}, then counts are taken from the exhaustive FAUST count matrix
+rather than the count matrix after excluding subsets that don't appear in sufficiently many
+experimental units. Default is \code{FALSE}.}
 }
 \description{
 Saves plots of counts to \code{project_path/faustData/plotData/pop_stats}
 for specified FAUST-identified subsets.
 }
+\details{
+The key parameter is \code{pop}. If \code{pop} is a list,
+then each element is treated as a population for which counts
+are required on aggregate (rather than for individual subsets
+of that population). If \code{pop} is a character vector, then
+it is treated as a population for which counts are required for
+individual subsets.
+}
 \examples{
 project_path <- usethis::proj_path(ext = "/inst/extdata")
+# plot all subsets of pop, as it is a character vector
 pop <- c("CD3" = "+", "CD4" = "+", "CD8-IgD" = "-",
          "CD20" = "-", "CD33" = "-", "CD14" = "-",
          "TCRgd-CD19" = "-")
 plot_faust_count(project_path = project_path,
                  pop = pop)
+# plot counts of cells matching annotation of each
+# element in pop, as pop is a list
 pop <- list(c("CD3" = "+", "CD4" = "+", "CD8-IgD" = "-",
 "CD20" = "-", "CD33" = "-", "CD14" = "-",
 "TCRgd-CD19" = "-"),
