@@ -36,3 +36,11 @@ sample), \code{pop} (population name) and
 \description{
 Get counts of subsets identified by FAUST
 }
+\examples{
+# get counts for cells matching one annotation
+pop <- c("CD4"  = "-", "CD8"  = "+")
+get_pop_counts(pop = pop)
+# get counts for cells matching either of the two annotations
+pop <- list(c("CD4"  = "-", "CD8"  = "+"), c("CD8" = "-", "CD4" = "+"))
+get_pop_counts(pop = pop)
+}

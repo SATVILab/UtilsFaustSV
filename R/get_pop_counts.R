@@ -22,7 +22,7 @@
 #' pop <- c("CD4"  = "-", "CD8"  = "+")
 #' get_pop_counts(pop = pop)
 #' # get counts for cells matching either of the two annotations
-#' pop <- list(c("CD4"  = "-", "CD8"  = "+"), c("CD8" = "-", 'CD4" = "+"))
+#' pop <- list(c("CD4"  = "-", "CD8"  = "+"), c("CD8" = "-", "CD4" = "+"))
 #' get_pop_counts(pop = pop)
 #' @export
 get_pop_counts <- function(project_path = NULL, data = NULL, pop = NULL, dem_col = c('sample', 'exp_unit', 'tot_count', 'sampleName', 'experimentalUnit')){
