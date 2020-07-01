@@ -12,7 +12,13 @@ test_that('plot_faust_count runs', {
   plot_faust_count(project_path = proj_path,
                    pop = list(c("CD4" = "-"), c("CD4" = "+", "HLA-DR-beads" = "+"),
                               c("CD4" = "+", "HLA-DR-beads" = "-")))
-  path_plot <- file.path(proj_path, 'faustData', 'plotData', 'pop_stats', 'Total counts by subset.png')
+  path_plot <- file.path(proj_path, 'faustData', 'plotData', 'pop_stats', 'Frequencies of subsets.png')
+  expect_true(file.exists(path_plot))
+
+  # NULL pop
+  plot_faust_count(project_path = proj_path,
+                   pop = NULL)
+  path_plot <- file.path(proj_path, 'faustData', 'plotData', 'pop_stats', 'Frequencies of all FAUST subsets.png')
   expect_true(file.exists(path_plot))
 
   unlink(file.path(proj_path, 'faustData', 'plotData'), recursive = TRUE)

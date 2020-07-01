@@ -11,7 +11,8 @@
 then counts of all subsets matching the set of marker levels are plotted.
 If a \code{list}, then each list element must be a character vector. In that case,
 one boxplot of frequencies is plotted for each element of the list of where the frequency is
-the sum of all cells that match the population specified.}
+the sum of all cells that match the population specified.
+If \code{NULL}, then all subsets found are plotted.}
 
 \item{search}{logical. If \code{TRUE}, then square brackets are concatenated
 around each of the elements in the level strings.}

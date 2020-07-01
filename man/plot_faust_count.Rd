@@ -23,7 +23,8 @@ plot_faust_count(
 then counts of all subsets matching the set of marker levels are plotted.
 If a \code{list}, then each list element must be a character vector. In that case,
 one boxplot of frequencies is plotted for each element of the list of where the frequency is
-the sum of all cells that match the population specified.}
+the sum of all cells that match the population specified.
+If \code{NULL}, then all subsets found are plotted.}
 
 \item{breaks}{numeric vector. If supplied, then this is the breaks
 for the x-axis. If not supplied, then the default breaks are used of

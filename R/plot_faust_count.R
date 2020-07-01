@@ -9,6 +9,7 @@
 #' If a \code{list}, then each list element must be a character vector. In that case,
 #' one boxplot of frequencies is plotted for each element of the list of where the frequency is
 #' the sum of all cells that match the population specified.
+#' If \code{NULL}, then all subsets found are plotted.
 #' @param breaks numeric vector. If supplied, then this is the breaks
 #' for the x-axis. If not supplied, then the default breaks are used of
 #' \code{c(0, 0.001, 0.005, 0.01, 0.02, 0.5, 0.1, 0.5, 1, 2, 5, 10, 20, 50, 100)}.
@@ -70,15 +71,18 @@ plot_faust_count <- function(project_path,
   # =======================================
 
   # check that pop is either a character vector or a list of character vectors
-  if(is.character(pop)){
-    if(is.null(names(pop))) stop("Character vectors in pop must be named. Names are the markers (e.g. CD4) and values are the FAUST annotations (e.g. '+' or '-').")
-  }
-  if(!is.character(pop)){
-    if(!is.list(pop)) stop('pop must be either a list of character vectors or a character vector.')
-    if(!all(purrr::map_lgl(pop, function(x) is.character(x)))){
-      stop('pop must be either a list of character vectors or a character vector.')
+  if(!is.null(pop)){
+    if(is.character(pop)){
+      if(is.null(names(pop))) stop("Character vectors in pop must be named. Names are the markers (e.g. CD4) and values are the FAUST annotations (e.g. '+' or '-').")
+    }
+    if(!is.character(pop)){
+      if(!is.list(pop)) stop('pop must be either a list of character vectors or a character vector, if not NULL.')
+      if(!all(purrr::map_lgl(pop, function(x) is.character(x)))){
+        stop('pop must be either a list of character vectors or a character vector, if not NULL.')
+      }
     }
   }
+
 
   # =======================================
   # Preparation
@@ -91,45 +95,53 @@ plot_faust_count <- function(project_path,
   # base directory
   dir_faust <- file.path(project_path, 'faustData')
 
-  # raw data
-  count_mat_name <- ifelse(exhaustive, 'exhaustiveFaustCountMatrix.rds',
-                           'faustCountMatrix.rds')
-  count_mat <- readRDS(file.path(dir_faust, count_mat_name))
-  analysis_map <- readRDS(file.path(dir_faust, 'metaData',
-                                    'analysisMap.rds')) %>%
-    tibble::as_tibble()
+  if(FALSE){
+    # raw data
+    count_mat_name <- ifelse(exhaustive, 'exhaustiveFaustCountMatrix.rds',
+                             'faustCountMatrix.rds')
+    count_mat <- readRDS(file.path(dir_faust, count_mat_name))
+    analysis_map <- readRDS(file.path(dir_faust, 'metaData',
+                                      'analysisMap.rds')) %>%
+      tibble::as_tibble()
 
-  # bind exp_unit column to count_tbl
-  count_tbl <- count_mat %>%
-    tibble::as_tibble() %>%
-    dplyr::mutate(sampleName = rownames(count_mat)) %>%
-    dplyr::select(sampleName, everything()) %>%
-    dplyr::left_join(analysis_map %>%
-                       dplyr::select(-impH),
-                     by = 'sampleName') %>%
-    dplyr::select(sampleName, experimentalUnit, everything()) %>%
-    dplyr::rename(sample = sampleName, exp_unit = experimentalUnit)
+    # bind exp_unit column to count_tbl
+    count_tbl <- count_mat %>%
+      tibble::as_tibble() %>%
+      dplyr::mutate(sampleName = rownames(count_mat)) %>%
+      dplyr::select(sampleName, everything()) %>%
+      dplyr::left_join(analysis_map %>%
+                         dplyr::select(-impH),
+                       by = 'sampleName') %>%
+      dplyr::select(sampleName, experimentalUnit, everything()) %>%
+      dplyr::rename(sample = sampleName, exp_unit = experimentalUnit)
 
-  # calculate total classified cells
-  count_tbl_tot <- count_tbl %>%
-    tidyr::pivot_longer(-c(sample:exp_unit),
-                 names_to = 'pop',
-                 values_to = 'count') %>%
-    dplyr::group_by(sample) %>%
-    dplyr::summarise(tot_count = sum(count),
-                     .groups = 'drop')
+    # calculate total classified cells
+    count_tbl_tot <- count_tbl %>%
+      tidyr::pivot_longer(-c(sample:exp_unit),
+                          names_to = 'pop',
+                          values_to = 'count') %>%
+      dplyr::group_by(sample) %>%
+      dplyr::mutate(tot_count = sum(count),
+                    .groups = 'drop')
 
-  count_tbl %<>%
-    dplyr::left_join(count_tbl_tot,
-                     by = 'sample')
+    count_tbl %<>%
+      dplyr::left_join(count_tbl_tot,
+                       by = 'sample')
+  }
 
   # ==============================
   # Subsetting
   # ==============================
 
-  count_tbl_subset <- get_pop_counts(data = count_tbl,
-                                      pop = pop,
-                                      dem_col = c('sample', 'exp_unit', 'tot_count'))
+  count_tbl_subset <- get_pop_counts(project_path = project_path,
+                                     pop = pop,
+                                     dem_col = c('sample', 'exp_unit', 'tot_count'))
+
+  if(FALSE){
+    count_tbl_subset <- get_pop_counts(data = count_tbl,
+                                       pop = pop,
+                                       dem_col = c('sample', 'exp_unit', 'tot_count'))
+  }
 
   # =================================
   # Plot preparation
@@ -148,9 +160,14 @@ plot_faust_count <- function(project_path,
   # remove from sub-population annotation the markers
 
   # get the name of the overall population
-  title <- ifelse(is.list(pop), "Total counts by subset",
-                  paste0(.collapse_pop(pop = pop, search = FALSE),
-                         collapse = ""))
+  if(is.null(pop)){
+    title <- "Frequencies of all FAUST subsets"
+  } else{
+    title <- ifelse(is.list(pop), "Frequencies of subsets",
+                    paste0(.collapse_pop(pop = pop, search = FALSE),
+                           collapse = ""))
+  }
+
   # get the breaks
   breaks <- c(signif(min(count_tbl_long$perc), 2),
               breaks,
