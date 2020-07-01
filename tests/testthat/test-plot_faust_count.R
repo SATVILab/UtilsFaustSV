@@ -21,6 +21,12 @@ test_that('plot_faust_count runs', {
   path_plot <- file.path(proj_path, 'faustData', 'plotData', 'pop_stats', 'Frequencies of all FAUST subsets.png')
   expect_true(file.exists(path_plot))
 
+  # large plots
+  plot_faust_count(project_path = proj_path,
+                   pop = NULL, p_height = 130, p_width = 130)
+  path_plot <- file.path(proj_path, 'faustData', 'plotData', 'pop_stats', 'Frequencies of all FAUST subsets.png')
+  expect_true(file.exists(path_plot))
+
   unlink(file.path(proj_path, 'faustData', 'plotData'), recursive = TRUE)
   unlink(file.path(proj_path, 'faustData', 'plotData'), recursive = TRUE)
 

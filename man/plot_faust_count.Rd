@@ -13,7 +13,8 @@ plot_faust_count(
   trans_x = "asinh",
   p_width = NULL,
   p_height = NULL,
-  exhaustive = FALSE
+  exhaustive = FALSE,
+  limitsize = FALSE
 )
 }
 \arguments{
@@ -46,6 +47,10 @@ where \code{n_pop} is the number of sub-populations in \code{pop}.}
 \item{exhaustive}{logical. If \code{TRUE}, then counts are taken from the exhaustive FAUST count matrix
 rather than the count matrix after excluding subsets that don't appear in sufficiently many
 experimental units. Default is \code{FALSE}.}
+
+\item{limitsize}{logical. If \code{TRUE}, then plots of size 125cm x 125cm or more are
+not saved but an error is returned when \code{cowplot::ggsave2} is run. Default
+is \code{FALSE}.}
 }
 \description{
 Saves plots of counts to \code{project_path/faustData/plotData/pop_stats}

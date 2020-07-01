@@ -26,6 +26,9 @@
 #' @param exhaustive logical. If \code{TRUE}, then counts are taken from the exhaustive FAUST count matrix
 #' rather than the count matrix after excluding subsets that don't appear in sufficiently many
 #' experimental units. Default is \code{FALSE}.
+#' @param limitsize logical. If \code{TRUE}, then plots of size 125cm x 125cm or more are
+#' not saved but an error is returned when \code{cowplot::ggsave2} is run. Default
+#' is \code{FALSE}.
 #'
 #' @details
 #' The key parameter is \code{pop}. If \code{pop} is a list,
@@ -65,7 +68,8 @@ plot_faust_count <- function(project_path,
                              trans_x = 'asinh',
                              p_width = NULL,
                              p_height = NULL,
-                             exhaustive = FALSE){
+                             exhaustive = FALSE,
+                             limitsize = FALSE){
   # =======================================
   # Checks
   # =======================================
@@ -172,7 +176,8 @@ plot_faust_count <- function(project_path,
   p_width <- ifelse(is.null(p_width), 40, p_width)
   cowplot::ggsave2(filename = fn,
                    plot = p,
-                   height = p_height, width = p_width, units = 'cm')
+                   height = p_height, width = p_width, units = 'cm',
+                   limitsize = limitsize)
 
   invisible(TRUE)
 }

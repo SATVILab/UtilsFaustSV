@@ -8,7 +8,8 @@ get_pop_counts(
   project_path = NULL,
   data = NULL,
   pop = NULL,
-  dem_col = c("sample", "exp_unit", "tot_count", "sampleName", "experimentalUnit")
+  dem_col = c("sample", "exp_unit", "tot_count", "sampleName", "experimentalUnit"),
+  exhaustive = FALSE
 )
 }
 \arguments{
@@ -28,6 +29,10 @@ If \code{NULL}, then all subsets are returned.}
 
 \item{dem_col}{\code{character vector}. Specifies names of columns in \code{data} that we wish
 to keep, regardless of if they match a FAUST annotation.}
+
+\item{exhaustive}{logical. If \code{TRUE}, then counts are taken from the exhaustive FAUST count matrix
+rather than the count matrix after excluding subsets that don't appear in sufficiently many
+experimental units. Default is \code{FALSE}.}
 }
 \value{
 A dataframe with columns as specified in \code{dem_col}, \code{tot_count} (total number of cells classified for a
