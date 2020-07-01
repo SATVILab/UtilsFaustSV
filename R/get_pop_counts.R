@@ -13,6 +13,9 @@
 #' If \code{NULL}, then all subsets are returned.
 #' @param dem_col \code{character vector}. Specifies names of columns in \code{data} that we wish
 #' to keep, regardless of if they match a FAUST annotation.
+#' @param exhaustive logical. If \code{TRUE}, then counts are taken from the exhaustive FAUST count matrix
+#' rather than the count matrix after excluding subsets that don't appear in sufficiently many
+#' experimental units. Default is \code{FALSE}.
 #'
 #' @return A dataframe with columns as specified in \code{dem_col}, \code{tot_count} (total number of cells classified for a
 #' sample), \code{pop} (population name) and
@@ -26,7 +29,9 @@
 #' pop <- list(c("CD4"  = "-", "CD8"  = "+"), c("CD8" = "-", "CD4" = "+"))
 #' get_pop_counts(pop = pop)
 #' @export
-get_pop_counts <- function(project_path = NULL, data = NULL, pop = NULL, dem_col = c('sample', 'exp_unit', 'tot_count', 'sampleName', 'experimentalUnit')){
+get_pop_counts <- function(project_path = NULL, data = NULL, pop = NULL,
+                           dem_col = c('sample', 'exp_unit', 'tot_count', 'sampleName', 'experimentalUnit'),
+                           exhaustive = FALSE){
 
   # read in data
   if(is.null(data)){
@@ -35,16 +40,19 @@ get_pop_counts <- function(project_path = NULL, data = NULL, pop = NULL, dem_col
     dir_faust <- file.path(project_path, 'faustData')
 
     # raw data
-    data <- readRDS(file.path(dir_faust, 'faustCountMatrix.rds'))
+    count_mat_name <- ifelse(exhaustive, 'exhaustiveFaustCountMatrix.rds',
+                             'faustCountMatrix.rds')
+    count_mat <- readRDS(file.path(dir_faust, count_mat_name))
+
     # analysis map
     analysis_map <- readRDS(file.path(dir_faust, 'metaData',
                                       'analysisMap.rds')) %>%
       tibble::as_tibble()
 
     # bind exp_unit column to count_tbl
-    data <- data %>%
+    data <- count_mat %>%
       tibble::as_tibble() %>%
-      dplyr::mutate(sampleName = rownames(data)) %>%
+      dplyr::mutate(sampleName = rownames(count_mat)) %>%
       dplyr::select(sampleName, everything()) %>%
       dplyr::left_join(analysis_map %>%
                          dplyr::select(-impH),

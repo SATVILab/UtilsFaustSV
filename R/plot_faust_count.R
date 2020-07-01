@@ -95,53 +95,14 @@ plot_faust_count <- function(project_path,
   # base directory
   dir_faust <- file.path(project_path, 'faustData')
 
-  if(FALSE){
-    # raw data
-    count_mat_name <- ifelse(exhaustive, 'exhaustiveFaustCountMatrix.rds',
-                             'faustCountMatrix.rds')
-    count_mat <- readRDS(file.path(dir_faust, count_mat_name))
-    analysis_map <- readRDS(file.path(dir_faust, 'metaData',
-                                      'analysisMap.rds')) %>%
-      tibble::as_tibble()
-
-    # bind exp_unit column to count_tbl
-    count_tbl <- count_mat %>%
-      tibble::as_tibble() %>%
-      dplyr::mutate(sampleName = rownames(count_mat)) %>%
-      dplyr::select(sampleName, everything()) %>%
-      dplyr::left_join(analysis_map %>%
-                         dplyr::select(-impH),
-                       by = 'sampleName') %>%
-      dplyr::select(sampleName, experimentalUnit, everything()) %>%
-      dplyr::rename(sample = sampleName, exp_unit = experimentalUnit)
-
-    # calculate total classified cells
-    count_tbl_tot <- count_tbl %>%
-      tidyr::pivot_longer(-c(sample:exp_unit),
-                          names_to = 'pop',
-                          values_to = 'count') %>%
-      dplyr::group_by(sample) %>%
-      dplyr::mutate(tot_count = sum(count),
-                    .groups = 'drop')
-
-    count_tbl %<>%
-      dplyr::left_join(count_tbl_tot,
-                       by = 'sample')
-  }
-
   # ==============================
   # Subsetting
   # ==============================
 
   count_tbl_subset <- get_pop_counts(project_path = project_path,
                                      pop = pop,
-                                     dem_col = c('sample', 'exp_unit', 'tot_count'))
-
-  if(FALSE){
-    count_tbl_subset <- get_pop_counts(data = count_tbl,
-                                       pop = pop,
-                                       dem_col = c('sample', 'exp_unit', 'tot_count'))
-  }
+                                     dem_col = c('sample', 'exp_unit', 'tot_count'),
+                                     exhaustive = exhaustive)
 
   # =================================
   # Plot preparation
