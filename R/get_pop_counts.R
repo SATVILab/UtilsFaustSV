@@ -10,6 +10,7 @@
 #' If a \code{list}, then each element must be a character vector as above. For a given list element,
 #' instead of all plotting all subsets individually that have the correct level for the specified markers,
 #' we sum over all the subsets matching the specified annotation and plot the final count.
+#' If \code{NULL}, then all subsets are returned.
 #' @param dem_col \code{character vector}. Specifies names of columns in \code{data} that we wish
 #' to keep, regardless of if they match a FAUST annotation.
 #'
