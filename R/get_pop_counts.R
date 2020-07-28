@@ -4,11 +4,10 @@
 #' @param data dataframe. Dataframe where columns specify counts. If \code{NULL},
 #' then it is read in from \code{project_path/faustData/faustCountMatrix.rds}.
 #' @param pop \code{named character vector} or \code{list}. If a \code{character vector},
-#' then names specify markers and values specify levels, e.g. c("CD4" = "-", "CD8" = "+") means
-#' that we are interested in FAUST subsets annotated "CD4-CD8+". Counts of all subsets with these
-#' levels for these markers are plotted separately.
+#' then names specify markers and values specify levels, e.g. c("CD4" = "-", "CD8" = "+"). Counts of
+#' all annotations will be returned that match these annotations separately, i.e. not summed.
 #' If a \code{list}, then each element must be a character vector as above. For a given list element,
-#' instead of all plotting all subsets individually that have the correct level for the specified markers,
+#' instead of all returning all subsets individually that have the correct level for the specified markers,
 #' we sum over all the subsets matching the specified annotation and plot the final count.
 #' If \code{NULL}, then all subsets are returned.
 #' @param dem_col \code{character vector}. Specifies names of columns in \code{data} that we wish

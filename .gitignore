@@ -3,3 +3,4 @@ faustutils.Rproj
 .Rproj.user
 .Rhistory
 inst/extdata/faustData/**
+tests/testthat/Rplots.pdf
