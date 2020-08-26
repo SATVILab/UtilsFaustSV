@@ -5,7 +5,8 @@
 #' as an FCS file for all samples gated or just a specified subset.
 #'
 #' @param project_path character. Path to directory containing FAUST output.
-#' @param gs GatingSet. Original \code{GatingSet} object to which \code{faust} was applied.
+#' @param gs GatingSet. Original \code{GatingSet} object to which \code{faust} was applied. If \code{NULL},
+#' then expression matrices from within faust project directory are used. Default is \code{NULL}.
 #' @param pop \code{list} or \code{named character vector}. If a \code{character vector},
 #' then all cells matching the set of marker levels are returned. If a \code{list}, then each
 #' element must be a \code{character vector}, and then
@@ -28,7 +29,7 @@
 #' @export
 save_faust_pop <- function(project_path,
                            pop,
-                           gs,
+                           gs = NULL,
                            sample = NULL,
                            trans = NULL){
 
@@ -37,7 +38,7 @@ save_faust_pop <- function(project_path,
   # =============================
 
   if(any(c(missing(project_path), missing(gs), missing(pop)))){
-    stop("Each of project_path, gs and pop parameters must have arguments.")
+    stop("Both of project_path and pop parameters must have arguments.")
   }
 
   # =============================
@@ -51,7 +52,22 @@ save_faust_pop <- function(project_path,
   # experimental unit specifies the group for gating and
   # the impH column specifies from where missing annotation boundaries
   # are imputed.
-  active_sample_vec <- readRDS(paste0(project_path, "/faustData/metaData/analysisMap.rds"))[,"sampleName"]
+  # get vector of sample names in gs
+  # if(!is.null(gs)){
+  #  active_sample_vec <- sapply(seq_along(gs), function(i) gs[[i]]@name)# readRDS(paste0(project_path, "/faustData/metaData/analysisMap.rds"))[,"sampleName"]
+  #  sel_sample_vec <- switch(typeof(sample),
+  #                           "integer" = ,
+  #                           "double" = active_sample_vec[sample],
+  #                           "NULL" = active_sample_vec,
+  #                           "character" = active_sample_vec[vapply(active_sample_vec, function(x) x %in% sample,
+  #                                                                  logical(length(sample)))],
+  #                           stop("Incorrect specification of sample parameter."))
+  #  # get vector of sample names in gs
+  #  sample_name_vec <- active_sample_vec
+  #} else{
+  active_sample_vec <- list.dirs(file.path(project_path, "faustData",
+                                         "sampleData"),
+                               recursive = FALSE, full.names = FALSE)
   sel_sample_vec <- switch(typeof(sample),
                            "integer" = ,
                            "double" = active_sample_vec[sample],
@@ -59,9 +75,9 @@ save_faust_pop <- function(project_path,
                            "character" = active_sample_vec[vapply(active_sample_vec, function(x) x %in% sample,
                                                                   logical(length(sample)))],
                            stop("Incorrect specification of sample parameter."))
+  # get vector of sample names in GatingSet
+  sample_name_vec <- purrr::map_chr(seq_along(gs), function(i) gs[[i]]@name)
 
-  # get vector of sample names in gs
-  sample_name_vec <- sapply(seq_along(gs), function(i) gs[[i]]@name)
 
   # create directory to save to
   # --------------------------------------
@@ -116,8 +132,15 @@ save_faust_pop <- function(project_path,
   for(sample in sel_sample){
 
     # get initial data
+    #if(!is.null(gs)){
     fr <- flowWorkspace::gh_pop_get_data(gs[[which(sample_name == sample)]])
     ex <- flowCore::exprs(fr)
+    #} else{
+    # ex <- readRDS(file.path(project_path, "faustData",
+    #                       "sampleData", sample,
+    #                       'exprsMat.rds'))
+    #}
+
 
     # get filtered expression matrix
     ex <- .get_faust_pop(sample = sample,
