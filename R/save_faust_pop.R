@@ -133,7 +133,11 @@ save_faust_pop <- function(project_path,
 
     # get initial data
     #if(!is.null(gs)){
-    fr <- flowWorkspace::gh_pop_get_data(gs[[which(sample_name == sample)]])
+    fr <- try(flowWorkspace::gh_pop_get_data(gs[[which(sample_name == 'a')]]))
+    if(class(fr) == 'try-error'){
+      print(sample_name)
+      print(sample)
+    }
     ex <- flowCore::exprs(fr)
     #} else{
     # ex <- readRDS(file.path(project_path, "faustData",
