@@ -133,7 +133,7 @@ save_faust_pop <- function(project_path,
 
     # get initial data
     #if(!is.null(gs)){
-    fr <- try(flowWorkspace::gh_pop_get_data(gs[[which(sample_name == 'a')]]))
+    fr <- try(flowWorkspace::gh_pop_get_data(gs[[which(sample_name == sample)]]))
     if(class(fr) == 'try-error'){
       print(sample_name)
       print(sample)
