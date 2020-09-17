@@ -50,7 +50,7 @@
                                sample)
     if(!dir.exists(dir_faust_ann)) dir.create(dir_faust_ann, recursive = TRUE)
     readr::write_csv(faust_ann_tbl, file.path(dir_faust_ann, "faustAnnotation.csv"),
-                     append = TRUE, col_names = FALSE)
+                     append = FALSE, col_names = FALSE)
   }
 
   # save GatingSet
@@ -84,7 +84,7 @@ testthat::test_that("save_faust_pop works correctly",{
 
   # run code for one sample
   save_faust_pop(project_path = dir_proj,
-                 pop = list("CD8-IgD" = 2),
+                 pop = c("CD8-IgD" = 2),
                  sample = 1,
                  gs = gs)
 
@@ -104,7 +104,7 @@ testthat::test_that("save_faust_pop works correctly",{
 
   # run code for same sample but for level 1 of CD8-IgD
   save_faust_pop(project_path = dir_proj,
-                 pop = list("CD8-IgD" = 1),
+                 pop = c("CD8-IgD" = 1),
                  sample = 1,
                  gs = gs)
 
@@ -127,7 +127,7 @@ testthat::test_that("save_faust_pop works correctly",{
 
   # run code for same sample but for level 1 of CD8-IgD
   save_faust_pop(project_path = dir_proj,
-                 pop = list("CD3" = 2),
+                 pop = c("CD3" = 2),
                  sample = "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs",
                  gs = gs)
 
@@ -149,7 +149,7 @@ testthat::test_that("save_faust_pop works correctly",{
 
   # run code for same sample but for level 1 of CD8-IgD
   save_faust_pop(project_path = dir_proj,
-                 pop = list("CD4" = 1),
+                 pop = c("CD4" = 1),
                  sample = NULL,
                  gs = gs)
 
@@ -167,6 +167,90 @@ testthat::test_that("save_faust_pop works correctly",{
   fr <- flowCore::read.FCS(file.path(dir_fcs, "CD4~1~", "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"))
   ex <- flowCore::exprs(fr)
   expect_identical(nrow(ex), 11L)
+
+  unlink(dir_fcs, recursive = TRUE)
+
+  # ==========================================
+  # Sample1 - CD8-IgD~1~ - CD8 level one or two
+  # ==========================================
+
+  # run code for same sample but for level 1 of CD8-IgD
+  save_faust_pop(project_path = dir_proj,
+                 pop = list(c("CD8-IgD" = 1),
+                            c("CD8-IgD" = 2)),
+                 sample = 1,
+                 gs = gs)
+
+  # check that folders are created correctly
+  dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
+  expect_true(dir.exists(file.path(dir_fcs, "CD8-IgD~12~")))
+  expect_identical(list.files(file.path(dir_fcs, "CD8-IgD~12~")), "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs")
+
+  # check that object was saved correctly
+  fr <- flowCore::read.FCS(file.path(dir_fcs, "CD8-IgD~12~", "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"))
+  ex_1 <- flowCore::exprs(fr)
+  expect_identical(nrow(ex_1), 15L)
+
+  unlink(dir_fcs, recursive = TRUE)
+
+  # ==========================================
+  # Sample1 - CD8-IgD~1~ - CD3 level 2
+  # ==========================================
+
+  # preliminary check that first pop is of size 4 and second of size 0
+  # run code for same sample but for level 1 of CD8-IgD
+  save_faust_pop(project_path = dir_proj,
+                 pop = c("CD3" = 2, "CD8-IgD" = 1),
+                 sample = 1,
+                 gs = gs)
+
+  # check that folders are created correctly
+  dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
+  expect_true(dir.exists(file.path(dir_fcs, "CD3~2~CD8-IgD~1~")))
+  expect_identical(list.files(file.path(dir_fcs, "CD3~2~CD8-IgD~1~")), "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs")
+
+  # check that object was saved correctly
+  fr <- flowCore::read.FCS(file.path(dir_fcs, "CD3~2~CD8-IgD~1~", "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"))
+  ex_1 <- flowCore::exprs(fr)
+  expect_identical(nrow(ex_1), 4L)
+
+  unlink(dir_fcs, recursive = TRUE)
+
+  # run code for same sample but for level 1 of CD8-IgD
+  save_faust_pop(project_path = dir_proj,
+                 pop = c("CD3" = 1, "CD8-IgD" = 2),
+                 sample = 1,
+                 gs = gs)
+
+  # check that folders are created correctly
+  dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
+  expect_true(dir.exists(file.path(dir_fcs, "CD3~1~CD8-IgD~2~")))
+  expect_identical(list.files(file.path(dir_fcs, "CD3~1~CD8-IgD~2~")), "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs")
+
+  # check that object was saved correctly
+  fr <- flowCore::read.FCS(file.path(dir_fcs, "CD3~1~CD8-IgD~2~", "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"))
+  ex_1 <- flowCore::exprs(fr)
+  expect_identical(nrow(ex_1), 1L)
+  expect_identical(ex_1[1,'Ba137Di'][[1]], NaN)
+
+  unlink(dir_fcs, recursive = TRUE)
+
+  # run code for same sample but for level 1 of CD8-IgD
+  save_faust_pop(project_path = dir_proj,
+                 pop = list(c("CD3" = 2, "CD8-IgD" = 1),
+                            c("CD3" = 1, "CD8-IgD" = 2)),
+                 sample = 1,
+                 gs = gs)
+
+  # check that folders are created correctly
+  dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
+  expect_true(dir.exists(file.path(dir_fcs, "CD3~21~CD8-IgD~12~")))
+  expect_identical(list.files(file.path(dir_fcs, "CD3~21~CD8-IgD~12~")), "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs")
+
+  # check that object was saved correctly
+  fr <- flowCore::read.FCS(file.path(dir_fcs, "CD3~21~CD8-IgD~12~", "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"))
+  ex_1 <- flowCore::exprs(fr)
+  expect_identical(nrow(ex_1), 4L)
 
   unlink(dir_fcs, recursive = TRUE)
 

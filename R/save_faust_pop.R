@@ -79,16 +79,39 @@ save_faust_pop <- function(project_path,
   sample_name_vec <- purrr::map_chr(seq_along(gs), function(i) gs[[i]]@name)
 
 
-  # create directory to save to
+  # create directory to save to and pop list to compare to
   # --------------------------------------
 
   # get concatenated name of population
-  pop_name <- ""
-  for(i in seq_along(pop)) pop_name <- paste0(pop_name,
-                                              names(pop)[i],
-                                              "~",
-                                              pop[[i]],
-                                              "~")
+  if(!is.list(pop)){
+    pop_name <- ""
+    for(i in seq_along(pop)) pop_name <- paste0(pop_name,
+                                                names(pop)[i],
+                                                "~",
+                                                pop[[i]],
+                                                "~")
+  } else if(is.list(pop) && all(purrr::map_lgl(pop, function(x) is.character(x) || is.numeric(x)))){
+    pop_name_vec <- purrr::map(pop, function(pop_curr) names(pop_curr)) %>%
+      unlist() %>%
+      unique()
+
+    pop_level_list <- purrr::map(pop_name_vec, function(pop_name){
+      pop_level_vec <- purrr::map_chr(pop, function(pop_curr){
+        if(!pop_name %in% names(pop_curr)) return("_")
+        stringr::str_sub(as.character(pop_curr[[pop_name]]), end = 1)
+      })
+      pop_level_vec
+    }) %>%
+      setNames(pop_name_vec)
+
+    pop_name <- purrr::map_chr(seq_along(pop_level_list), function(i) paste0(names(pop_level_list)[i],
+                                                                             "~",
+                                                                             paste0(unique(pop_level_list[[i]]),
+                                                                                    collapse = ""),
+                                                                             "~")) %>%
+      paste0(collapse = "")
+  }
+
 
   #  create directory
   dir_save <- file.path(project_path,
@@ -145,12 +168,19 @@ save_faust_pop <- function(project_path,
     #                       'exprsMat.rds'))
     #}
 
+    # annotations for each cell for a given sample
+    path_ann <- file.path(project_path, "faustData", "sampleData",
+                          sample, "faustAnnotation.csv")
+    if(!file.exists(path_ann)) stop(paste0("no faust annotation file found for sample ", sample))
+    faust_ann_tbl <- utils::read.table(file = path_ann,
+                                       header = FALSE, sep = "`",
+                                       stringsAsFactors = FALSE)[,1,drop = FALSE]
+
 
     # get filtered expression matrix
-    ex <- .get_faust_pop(sample = sample,
-                         project_path = project_path,
-                         pop = pop,
-                         ex = ex)
+    ex <- .get_faust_pop(pop = pop,
+                         ex = ex,
+                         faust_ann = faust_ann_tbl)
 
     # update flowFrame
     flowCore::exprs(fr) <- ex
@@ -169,29 +199,12 @@ save_faust_pop <- function(project_path,
 #' @param ex \code{matrix}. Matrix containing marker expression values for \code{sample}.
 #' @inheritParams save_faust_pop
 #'
+#' @details
+#' This is effectively an inclusive OR statement across the different population
+#' annotations.
+#'
 #' @return Numeric matrix.
-.get_faust_pop <- function(ex, sample, project_path, pop){
-  # annotations for each cell for a given sample
-  path_ann <- file.path(project_path, "faustData", "sampleData",
-                        sample, "faustAnnotation.csv")
-  if(!file.exists(path_ann)) stop(paste0("no faust annotation file found for sample ", sample))
-  faust_ann_tbl <- utils::read.table(file = path_ann,
-                                     header = FALSE, sep = "`",
-                                     stringsAsFactors = FALSE)[,1,drop = FALSE]
-
-  # get expression matrix for cells in pop
-  .get_faust_pop_pop(ex = ex, faust_ann = faust_ann_tbl, pop = pop)
-}
-
-#' Return expression matrix for cells that match a single FAUST label
-#'
-#' @inheritParams save_faust_pop
-#' @param ex \code{numeric matrix}. Contains expression data.
-#' @param faust_ann \code{character vector}. Specifies FAUST annotation for
-#' each cell in \code{ex}.
-#'
-#' @return \code{numeric matrix} containing the expression levels for the markers specified.
-.get_faust_pop_pop <- function(ex, faust_ann, pop){
+.get_faust_pop <- function(ex, pop, faust_ann){
 
   # vector to indicate if a match or not
   match <- rep(FALSE, nrow(ex))
@@ -199,10 +212,16 @@ save_faust_pop <- function(project_path,
   # would not be a list if pop were specified as a character vector,
   # if only one set of markers can be a match.
   # would be a list if either of a set of markers could be a match.
-  if(is.character(pop)) pop <- list(pop)
+  if(is.character(pop) || is.numeric(pop)) pop <- list(pop)
   for(i in seq_along(pop)){
     # set to TRUE if a match for given population
-    match <- match | .is_faust_ann_a_match_pop(faust_ann = faust_ann, pop = pop)
+    match <- match | .is_faust_ann_a_match_pop(faust_ann = faust_ann, pop = pop[[i]])
+  }
+
+  if(sum(match) == 0){
+    ex <- ex[1,,drop = FALSE]
+    for(j in 1:ncol(ex)) ex[1,j] <- NA
+    return(ex)
   }
 
   ex[match, , drop = FALSE]
@@ -216,6 +235,11 @@ save_faust_pop <- function(project_path,
 #' levels of marker. Values must be of the form or "<num_1>" or "<num_1>~<num_2>", where
 #' <num_1> is the level for the marker and <num_2> is the total number of levels for
 #' the marker.
+#'
+#' @details
+#' This is effectively an AND statement across all markers specified in the
+#' single FAUST population annotation.
+#'
 #' @importFrom stringr str_locate str_sub
 .is_faust_ann_a_match_pop <- function(faust_ann, pop){
 
@@ -233,7 +257,7 @@ save_faust_pop <- function(project_path,
 
 #' @title Check if FAUST annotation has as given level for a given marker
 #'
-#' @inheritParams .get_faust_pop_pop
+#' @inheritParams .get_faust_pop
 #' @param marker character. Name of marker.
 #' @param level character. Level of marker, e.g. "1", "2" or "3".
 .is_faust_ann_a_match_for_marker <- function(faust_ann, marker, level){
