@@ -31,7 +31,8 @@ save_faust_pop <- function(project_path,
                            pop,
                            gs = NULL,
                            sample = NULL,
-                           trans = NULL){
+                           trans_fn = NULL,
+                           trans_chnl = NULL){
 
   # =============================
   # Check
@@ -128,7 +129,9 @@ save_faust_pop <- function(project_path,
                   sample_name = sample_name_vec,
                   sel_sample = sel_sample_vec,
                   pop = pop,
-                  dir_save = dir_save)
+                  dir_save = dir_save,
+                  trans_fn = trans_fn,
+                  trans_chnl = trans_chnl)
 
 }
 
@@ -149,7 +152,9 @@ save_faust_pop <- function(project_path,
                             sample_name,
                             sel_sample,
                             pop,
-                            dir_save){
+                            dir_save,
+                            trans_fn = NULL,
+                            trans_chnl = NULL){
 
   # extract data, filter and save
   for(sample in sel_sample){
@@ -181,6 +186,17 @@ save_faust_pop <- function(project_path,
     ex <- .get_faust_pop(pop = pop,
                          ex = ex,
                          faust_ann = faust_ann_tbl)
+
+    # transform
+    if(!is.null(trans_fn)){
+      if(is.null(trans_chnl)){
+        ex <- trans_fn(ex)
+      } else{
+        for(nm in trans_chnl){
+          ex[,nm] <-  trans_fn(ex[,nm])
+        }
+      }
+    }
 
     # update flowFrame
     flowCore::exprs(fr) <- ex
