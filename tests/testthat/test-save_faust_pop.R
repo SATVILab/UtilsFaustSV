@@ -86,7 +86,7 @@ testthat::test_that("save_faust_pop works correctly",{
   save_faust_pop(project_path = dir_proj,
                  pop = c("CD8-IgD" = 2),
                  sample = 1,
-                 gs = gs)
+                 fr_source = gs)
 
   # check that folders are created correctly
   dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
@@ -106,7 +106,7 @@ testthat::test_that("save_faust_pop works correctly",{
   save_faust_pop(project_path = dir_proj,
                  pop = c("CD8-IgD" = 1),
                  sample = 1,
-                 gs = gs)
+                 fr_source = gs)
 
   # check that folders are created correctly
   dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
@@ -129,7 +129,7 @@ testthat::test_that("save_faust_pop works correctly",{
   save_faust_pop(project_path = dir_proj,
                  pop = c("CD3" = 2),
                  sample = "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs",
-                 gs = gs)
+                 fr_source = gs)
 
   # check that folders are created correctly
   dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
@@ -151,7 +151,7 @@ testthat::test_that("save_faust_pop works correctly",{
   save_faust_pop(project_path = dir_proj,
                  pop = c("CD4" = 1),
                  sample = NULL,
-                 gs = gs)
+                 fr_source = gs)
 
   # check that folders are created correctly
   dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
@@ -179,7 +179,7 @@ testthat::test_that("save_faust_pop works correctly",{
                  pop = list(c("CD8-IgD" = 1),
                             c("CD8-IgD" = 2)),
                  sample = 1,
-                 gs = gs)
+                 fr_source = gs)
 
   # check that folders are created correctly
   dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
@@ -202,7 +202,7 @@ testthat::test_that("save_faust_pop works correctly",{
   save_faust_pop(project_path = dir_proj,
                  pop = c("CD3" = 2, "CD8-IgD" = 1),
                  sample = 1,
-                 gs = gs)
+                 fr_source = gs)
 
   # check that folders are created correctly
   dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
@@ -220,7 +220,7 @@ testthat::test_that("save_faust_pop works correctly",{
   save_faust_pop(project_path = dir_proj,
                  pop = c("CD3" = 1, "CD8-IgD" = 2),
                  sample = 1,
-                 gs = gs)
+                 fr_source = gs)
 
   # check that folders are created correctly
   dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
@@ -240,7 +240,7 @@ testthat::test_that("save_faust_pop works correctly",{
                  pop = list(c("CD3" = 2, "CD8-IgD" = 1),
                             c("CD3" = 1, "CD8-IgD" = 2)),
                  sample = 1,
-                 gs = gs)
+                 fr_source = gs)
 
   # check that folders are created correctly
   dir_fcs <- file.path(dir_proj, "faustData", "fcsData")

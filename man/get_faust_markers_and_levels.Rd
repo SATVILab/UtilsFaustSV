@@ -7,7 +7,7 @@
 get_faust_markers_and_levels(project_path)
 }
 \arguments{
-\item{project_path}{character. Path to directory containing FAUST output.}
+\item{project_path}{character. FAUST project directory.}
 }
 \value{
 \code{Character vector}

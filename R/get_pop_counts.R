@@ -29,7 +29,8 @@
 #' get_pop_counts(pop = pop)
 #' @export
 get_pop_counts <- function(project_path = NULL, data = NULL, pop = NULL,
-                           dem_col = c('sample', 'exp_unit', 'tot_count', 'sampleName', 'experimentalUnit'),
+                           dem_col = c('sample', 'exp_unit', 'tot_count', 'tot_count_classified',
+                                       'sampleName', 'experimentalUnit'),
                            exhaustive = FALSE){
 
   # read in data
@@ -42,6 +43,8 @@ get_pop_counts <- function(project_path = NULL, data = NULL, pop = NULL,
     count_mat_name <- ifelse(exhaustive, 'exhaustiveFaustCountMatrix.rds',
                              'faustCountMatrix.rds')
     count_mat <- readRDS(file.path(dir_faust, count_mat_name))
+
+
 
     # analysis map
     analysis_map <- readRDS(file.path(dir_faust, 'metaData',
@@ -66,6 +69,7 @@ get_pop_counts <- function(project_path = NULL, data = NULL, pop = NULL,
                           values_to = 'count') %>%
       dplyr::group_by(sample) %>%
       dplyr::summarise(tot_count = sum(count),
+                       tot_count_classified = sum(count[pop != "0_0_0_0_0"]),
                        .groups = 'drop')
 
     data %<>%

@@ -18,7 +18,7 @@ plot_faust_count(
 )
 }
 \arguments{
-\item{project_path}{character. Path to directory containing FAUST output.}
+\item{project_path}{character. FAUST project directory.}
 
 \item{pop}{\code{list} or \code{named character vector}. If a \code{character vector},
 then counts of all subsets matching the set of marker levels are plotted.

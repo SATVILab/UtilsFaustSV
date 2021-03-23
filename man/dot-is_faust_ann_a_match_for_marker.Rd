@@ -7,9 +7,6 @@
 .is_faust_ann_a_match_for_marker(faust_ann, marker, level)
 }
 \arguments{
-\item{faust_ann}{\code{character vector}. Specifies FAUST annotation for
-each cell in \code{ex}.}
-
 \item{marker}{character. Name of marker.}
 
 \item{level}{character. Level of marker, e.g. "1", "2" or "3".}

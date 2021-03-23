@@ -4,12 +4,24 @@
 \alias{.save_faust_pop}
 \title{Save FAUST subset as an FCS file}
 \usage{
-.save_faust_pop(project_path, gs, sample_name, sel_sample, pop, dir_save)
+.save_faust_pop(
+  project_path,
+  fr_source,
+  sample_name,
+  sel_sample,
+  pop,
+  dir_save,
+  trans_fn = NULL,
+  trans_chnl = NULL
+)
 }
 \arguments{
-\item{project_path}{character. Path to directory containing FAUST output.}
+\item{project_path}{character. FAUST project directory.}
 
-\item{gs}{GatingSet. Original \code{GatingSet} object to which \code{faust} was applied.}
+\item{fr_source}{GatingSet or character vector. If a \code{GatingSet}, then
+the flowFrames within the GatingSet are used to create the output fcs files.
+If a character vector, then must specify a directory containing FCS files. These FCS
+files are used to create the output fcs files.}
 
 \item{sample_name}{\code{character vector}. Specifies names of samples in order
 in which they are found in \code{gs}.}
@@ -25,6 +37,13 @@ element must be a \code{character vector}, and then
 all cells matching either of these specified sets of marker levels are returned.}
 
 \item{dir_save}{\code{character}. Specifies directory in which files are saved.}
+
+\item{trans_fn}{function. If supplied, this function is applied to the expression data.
+Useful for back-transformation. If \code{NULL}, then no transformation is applied. Default is \code{NULL}.}
+
+\item{trans_chnl}{character vector. If specified, \code{trans_fn} is applied to only these channels.
+If \code{NULL} and if \code{trans_fn} is not \code{NULL}, then \code{trans_fn} is applied to entire
+expression matrix. Default is \code{NULL}.}
 }
 \value{
 \code{invisible(TRUE)}.

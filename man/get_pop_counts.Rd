@@ -13,7 +13,7 @@ get_pop_counts(
 )
 }
 \arguments{
-\item{project_path}{character. Path to directory containing FAUST output.}
+\item{project_path}{character. FAUST project directory.}
 
 \item{data}{dataframe. Dataframe where columns specify counts. If \code{NULL},
 then it is read in from \code{project_path/faustData/faustCountMatrix.rds}.}

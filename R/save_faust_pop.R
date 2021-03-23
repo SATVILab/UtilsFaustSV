@@ -4,9 +4,11 @@
 #' Save a specified FAUST-identified population to \code{project_path/faustData/fcsData}
 #' as an FCS file for all samples gated or just a specified subset.
 #'
-#' @param project_path character. Path to directory containing FAUST output.
-#' @param gs GatingSet. Original \code{GatingSet} object to which \code{faust} was applied. If \code{NULL},
-#' then expression matrices from within faust project directory are used. Default is \code{NULL}.
+#' @param project_path character. FAUST project directory.
+#' @param fr_source GatingSet or character vector. If a \code{GatingSet}, then
+#' the flowFrames within the GatingSet are used to create the output fcs files.
+#' If a character vector, then must specify a directory containing FCS files. These FCS
+#' files are used to create the output fcs files.
 #' @param pop \code{list} or \code{named character vector}. If a \code{character vector},
 #' then all cells matching the set of marker levels are returned. If a \code{list}, then each
 #' element must be a \code{character vector}, and then
@@ -15,21 +17,20 @@
 #' specifies the indices of the samples for which to save output. If character,
 #' then it specifies the names of the sames to save output for. If \code{NULL},
 #' then the output for every sample is saved. Default is \code{NULL}.
-#' @param trans function. If supplied, this function is applied to the expression data.
-#' Useful for back-transformation, as the original
-#' GatingSet . If \code{NULL}, then no transformation is applied. Default is \code{NULL}.
-#' Not working at the moment.
-#' @param saveFCS Boolean. If \code{TRUE}, then FCS files of the selected cell population(s)
-#' and sample(s) are saved to project_path/faustData/fcsData. Default is \code{FALSE}.
-#' population of all the selected samplesare saved to project_path/faustData/gsData. Default is \code{FALSE}.
+#' @param trans_fn function. If supplied, this function is applied to the expression data.
+#' Useful for back-transformation. If \code{NULL}, then no transformation is applied. Default is \code{NULL}.
+#' @param trans_chnl character vector. If specified, \code{trans_fn} is applied to only these channels.
+#' If \code{NULL} and if \code{trans_fn} is not \code{NULL}, then \code{trans_fn} is applied to entire
+#' expression matrix. Default is \code{NULL}.
 #'
 #' @return \code{invisible(TRUE)}. Side effect is the saved FCS file.
 #' @examples save_faust_pop(project_path = "", pop = list("CD3" = 2),
 #' gs = gs, sample = 1)
+#'
 #' @export
 save_faust_pop <- function(project_path,
                            pop,
-                           gs = NULL,
+                           fr_source = NULL,
                            sample = NULL,
                            trans_fn = NULL,
                            trans_chnl = NULL){
@@ -38,7 +39,7 @@ save_faust_pop <- function(project_path,
   # Check
   # =============================
 
-  if(any(c(missing(project_path), missing(gs), missing(pop)))){
+  if(any(c(missing(project_path), missing(fr_source), missing(pop)))){
     stop("Both of project_path and pop parameters must have arguments.")
   }
 
@@ -77,7 +78,16 @@ save_faust_pop <- function(project_path,
                                                                   logical(length(sample)))],
                            stop("Incorrect specification of sample parameter."))
   # get vector of sample names in GatingSet
-  sample_name_vec <- purrr::map_chr(seq_along(gs), function(i) gs[[i]]@name)
+  if(class(fr_source) == 'GatingSet'){
+    sample_name_vec <- purrr::map_chr(seq_along(fr_source), function(i) fr_source[[i]]@name)
+  } else if(class(fr_source) == 'character'){
+    sample_name_vec <- purrr::map(fr_source, function(fr_source_curr){
+      list.files(fr_source_curr, full.names = FALSE)
+    }) %>%
+      unlist()
+  }
+
+
 
 
   # create directory to save to and pop list to compare to
@@ -125,7 +135,7 @@ save_faust_pop <- function(project_path,
   # Save FAUST pops
   # =============================
 
-  .save_faust_pop(project_path = project_path, gs = gs,
+  .save_faust_pop(project_path = project_path, fr_source = fr_source,
                   sample_name = sample_name_vec,
                   sel_sample = sel_sample_vec,
                   pop = pop,
@@ -148,7 +158,7 @@ save_faust_pop <- function(project_path,
 #'
 #' @return \code{invisible(TRUE)}.
 .save_faust_pop <- function(project_path,
-                            gs,
+                            fr_source,
                             sample_name,
                             sel_sample,
                             pop,
@@ -161,17 +171,27 @@ save_faust_pop <- function(project_path,
 
     # get initial data
     #if(!is.null(gs)){
-    fr <- try(flowWorkspace::gh_pop_get_data(gs[[which(sample_name == sample)]]))
+    if(class(fr_source) == 'GatingSet'){
+      fr <- try(flowWorkspace::gh_pop_get_data(fr_source[[which(sample_name == sample)]]))
+    } else if(class(fr_source) == 'character'){
+      fr <- purrr::map(fr_source, function(fr_source_curr){
+        fr_path <- file.path(fr_source_curr, sample)
+        if(!file.exists(fr_path)) return(NULL)
+        flowCore::read.FCS(fr_path)
+      }) %>%
+        purrr::compact()
+      fr <- fr[[1]]
+    }
+
     if(class(fr) == 'try-error'){
       print(sample_name)
       print(sample)
+      stop(paste0("error in loading sample", sample))
     }
+
+
     ex <- flowCore::exprs(fr)
-    #} else{
-    # ex <- readRDS(file.path(project_path, "faustData",
-    #                       "sampleData", sample,
-    #                       'exprsMat.rds'))
-    #}
+
 
     # annotations for each cell for a given sample
     path_ann <- file.path(project_path, "faustData", "sampleData",
@@ -181,6 +201,7 @@ save_faust_pop <- function(project_path,
                                        header = FALSE, sep = "`",
                                        stringsAsFactors = FALSE)[,1,drop = FALSE]
 
+    if(nrow(ex) != nrow(faust_ann_tbl)) stop(paste0("ex in FlowFrame has different number of rows to the number of faust annotations for sample", sample))
 
     # get filtered expression matrix
     ex <- .get_faust_pop(pop = pop,
