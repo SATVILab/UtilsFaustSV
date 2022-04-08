@@ -1,4 +1,4 @@
-Package: faustutils
+Package: UtilsFaustMR
 Type: Package
 Title: Additional functions to extract and plot FAUST output
 Version: 0.1.0
