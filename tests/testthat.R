@@ -1,4 +1,4 @@
 library(testthat)
-library(faustutils)
+library(UtilsFaustSV)
 
-test_check("faustutils")
+test_check("UtilsFaustSV")

@@ -1,22 +1,21 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# faustutils
+# UtilsFaustSV
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
-The goal of faustutils is to provide convenient functions to interrogate
-a FAUST clustering and extract output from it.
+The goal of UtilsFaustSV is to provide convenient functions to
+interrogate a FAUST clustering and extract output from it.
 
 ## Installation
 
 You can install the package from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("MiguelRodo/faustutils")
+if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+remotes::install_github("SATVILab/UtilsFaustSV")
 ```
 
 ## Example
@@ -24,7 +23,7 @@ devtools::install_github("MiguelRodo/faustutils")
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
-library(faustutils)
+library(UtilsFaustSV)
 ```
 
 First save the directory FAUST saved results to:
@@ -32,7 +31,7 @@ First save the directory FAUST saved results to:
 ``` r
 # set the FAUST project path
 proj_path <- usethis::proj_path('tests/testthat')
-#> √ Setting active project to 'C:/Users/migue/OneDrive - University of Cape Town/Work/PhD/Code/faustutils'
+#> v Setting active project to 'C:/Users/migue/Work/Packages/UtilsFAUSTSV'
 ```
 
 You can get the names of the markers FAUST used to cluster and the

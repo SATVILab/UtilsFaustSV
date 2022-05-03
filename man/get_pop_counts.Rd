@@ -8,7 +8,8 @@ get_pop_counts(
   project_path = NULL,
   data = NULL,
   pop = NULL,
-  dem_col = c("sample", "exp_unit", "tot_count", "sampleName", "experimentalUnit"),
+  dem_col = c("sample", "exp_unit", "tot_count", "tot_count_classified", "sampleName",
+    "experimentalUnit"),
   exhaustive = FALSE
 )
 }
