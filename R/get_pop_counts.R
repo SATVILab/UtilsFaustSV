@@ -22,33 +22,38 @@
 #'
 #' @examples
 #' # get counts for cells matching one annotation
-#' pop <- c("CD4"  = "-", "CD8"  = "+")
+#' pop <- c("CD4" = "-", "CD8" = "+")
 #' get_pop_counts(pop = pop)
 #' # get counts for cells matching either of the two annotations
-#' pop <- list(c("CD4"  = "-", "CD8"  = "+"), c("CD8" = "-", "CD4" = "+"))
+#' pop <- list(c("CD4" = "-", "CD8" = "+"), c("CD8" = "-", "CD4" = "+"))
 #' get_pop_counts(pop = pop)
 #' @export
 get_pop_counts <- function(project_path = NULL, data = NULL, pop = NULL,
-                           dem_col = c('sample', 'exp_unit', 'tot_count', 'tot_count_classified',
-                                       'sampleName', 'experimentalUnit'),
-                           exhaustive = FALSE){
+                           dem_col = c(
+                             "sample", "exp_unit", "tot_count", "tot_count_classified",
+                             "sampleName", "experimentalUnit"
+                           ),
+                           exhaustive = FALSE) {
 
   # read in data
-  if(is.null(data)){
-    if(is.null(project_path)) stop("If data is not specified, then project_path must be.")
+  if (is.null(data)) {
+    if (is.null(project_path)) stop("If data is not specified, then project_path must be.")
     # base directory
-    dir_faust <- file.path(project_path, 'faustData')
+    dir_faust <- file.path(project_path, "faustData")
 
     # raw data
-    count_mat_name <- ifelse(exhaustive, 'exhaustiveFaustCountMatrix.rds',
-                             'faustCountMatrix.rds')
+    count_mat_name <- ifelse(exhaustive, "exhaustiveFaustCountMatrix.rds",
+      "faustCountMatrix.rds"
+    )
     count_mat <- readRDS(file.path(dir_faust, count_mat_name))
 
 
 
     # analysis map
-    analysis_map <- readRDS(file.path(dir_faust, 'metaData',
-                                      'analysisMap.rds')) %>%
+    analysis_map <- readRDS(file.path(
+      dir_faust, "metaData",
+      "analysisMap.rds"
+    )) %>%
       tibble::as_tibble()
 
     # bind exp_unit column to count_tbl
@@ -57,26 +62,33 @@ get_pop_counts <- function(project_path = NULL, data = NULL, pop = NULL,
       dplyr::mutate(sampleName = rownames(count_mat)) %>%
       dplyr::select(sampleName, everything()) %>%
       dplyr::left_join(analysis_map %>%
-                         dplyr::select(-impH),
-                       by = 'sampleName') %>%
+        dplyr::select(-impH),
+      by = "sampleName"
+      ) %>%
       dplyr::select(sampleName, experimentalUnit, everything()) %>%
       dplyr::rename(sample = sampleName, exp_unit = experimentalUnit)
 
     # calculate total classified cells
     count_tbl_tot <- data %>%
       tidyr::pivot_longer(-c(sample:exp_unit),
-                          names_to = 'pop',
-                          values_to = 'count') %>%
+        names_to = "pop",
+        values_to = "count"
+      ) %>%
       dplyr::group_by(sample) %>%
-      dplyr::summarise(tot_count = sum(count),
-                       tot_count_classified = sum(count[pop != "0_0_0_0_0"]),
-                       .groups = 'drop')
+      dplyr::summarise(
+        tot_count = sum(count),
+        tot_count_classified = sum(count[pop != "0_0_0_0_0"]),
+        .groups = "drop"
+      )
 
     data %<>%
       dplyr::left_join(count_tbl_tot,
-                       by = 'sample')
+        by = "sample"
+      )
 
-    if(is.null(pop)) return(data %>% dplyr::select(sample, exp_unit, tot_count, everything()))
+    if (is.null(pop)) {
+      return(data %>% dplyr::select(sample, exp_unit, tot_count, everything()))
+    }
   }
 
   # get columns whose indices match the "demographic" info
@@ -84,44 +96,48 @@ get_pop_counts <- function(project_path = NULL, data = NULL, pop = NULL,
   data_dem <- data[, dem_col_ind_vec, drop = FALSE]
   # if a single annotation set is all that's specified, return all subsets matching
   # it individually
-  if(is.character(pop)){
+  if (is.character(pop)) {
     pop_col_ind_vec <- .get_pop_match_ind(data = data, pop = pop)
-    pop_col_name_vec <- colnames(data[,pop_col_ind_vec])
+    pop_col_name_vec <- colnames(data[, pop_col_ind_vec])
     # for each column identified, remove each annotation specifying
     # the main subset of which it's a part
-    for(i in seq_along(pop_col_name_vec)){
-      for(j in seq_along(pop)){
-        pop_col_name_vec[i] <- stringr::str_remove(pop_col_name_vec[i],
-                                                   paste0(names(pop)[[j]],
-                                                          "[[",
-                                                          pop[j],
-                                                          "]]"))
+    for (i in seq_along(pop_col_name_vec)) {
+      for (j in seq_along(pop)) {
+        pop_col_name_vec[i] <- stringr::str_remove(
+          pop_col_name_vec[i],
+          paste0(
+            names(pop)[[j]],
+            "[[",
+            pop[j],
+            "]]"
+          )
+        )
       }
     }
     # select only columns found to match annotation set
-    data_resp <- data[,pop_col_ind_vec, drop = FALSE]
+    data_resp <- data[, pop_col_ind_vec, drop = FALSE]
     # rename columns as per above
     colnames(data_resp) <- pop_col_name_vec
     # join dem columns to response columns
     data_out <- dplyr::bind_cols(data_dem, data_resp)
     return(data_out)
-
-  } else if(is.list(pop)){
+  } else if (is.list(pop)) {
     # if multiple pops are specified, sum within each
     data_out <- data_dem
-    for(pop_curr in pop){
+    for (pop_curr in pop) {
       # get columns matching current annotation set
       pop_col_ind_vec <- .get_pop_match_ind(data = data, pop = pop_curr)
 
       # add up counts over all population subsets identified
       count_vec <- rep(0, nrow(data_dem))
-      for(pop_ind in pop_col_ind_vec){
+      for (pop_ind in pop_col_ind_vec) {
         count_vec <- count_vec + data[[pop_ind]]
       }
 
       # append counts to dataframe
       pop_name <- paste0(.collapse_pop(pop = pop_curr, search = FALSE),
-                         collapse = "")
+        collapse = ""
+      )
       data_out[[pop_name]] <- count_vec
     }
     return(data_out)

@@ -17,11 +17,8 @@ If \code{NULL}, then all subsets found are plotted.}
 \item{search}{logical. If \code{TRUE}, then square brackets are concatenated
 around each of the elements in the level strings.}
 }
-\value{
-
-}
 \description{
-
+Get a searchable version of the marker levels
 }
 \examples{
 .collapse_pop(c("CD4" = "-", CD3" = "-"), search = FALSE); .collapse_pop(c("CD4" = "-", CD3" = "-"), search = TRUE)

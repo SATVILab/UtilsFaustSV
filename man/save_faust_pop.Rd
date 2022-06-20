@@ -46,7 +46,9 @@ Save a specified FAUST-identified population to \code{project_path/faustData/fcs
 as an FCS file for all samples gated or just a specified subset.
 }
 \examples{
-save_faust_pop(project_path = "", pop = list("CD3" = 2),
-gs = gs, sample = 1)
+save_faust_pop(
+  project_path = "", pop = list("CD3" = 2),
+  gs = gs, sample = 1
+)
 
 }

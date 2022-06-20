@@ -44,45 +44,57 @@
 #' @examples
 #' project_path <- usethis::proj_path(ext = "/inst/extdata")
 #' # plot all subsets of pop, as it is a character vector
-#' pop <- c("CD3" = "+", "CD4" = "+", "CD8-IgD" = "-",
-#'          "CD20" = "-", "CD33" = "-", "CD14" = "-",
-#'          "TCRgd-CD19" = "-")
-#' plot_faust_count(project_path = project_path,
-#'                  pop = pop)
+#' pop <- c(
+#'   "CD3" = "+", "CD4" = "+", "CD8-IgD" = "-",
+#'   "CD20" = "-", "CD33" = "-", "CD14" = "-",
+#'   "TCRgd-CD19" = "-"
+#' )
+#' plot_faust_count(
+#'   project_path = project_path,
+#'   pop = pop
+#' )
 #' # plot counts of cells matching annotation of each
 #' # element in pop, as pop is a list
-#' pop <- list(c("CD3" = "+", "CD4" = "+", "CD8-IgD" = "-",
-#' "CD20" = "-", "CD33" = "-", "CD14" = "-",
-#' "TCRgd-CD19" = "-"),
-#' c("CD3" = "+", "CD4" = "-", "CD8-IgD" = "+",
-#'   "CD20" = "-", "CD33" = "-", "CD14" = "-",
-#'  "TCRgd-CD19" = "-"))
-#' plot_faust_count(project_path = project_path,
-#' pop = pop)
+#' pop <- list(
+#'   c(
+#'     "CD3" = "+", "CD4" = "+", "CD8-IgD" = "-",
+#'     "CD20" = "-", "CD33" = "-", "CD14" = "-",
+#'     "TCRgd-CD19" = "-"
+#'   ),
+#'   c(
+#'     "CD3" = "+", "CD4" = "-", "CD8-IgD" = "+",
+#'     "CD20" = "-", "CD33" = "-", "CD14" = "-",
+#'     "TCRgd-CD19" = "-"
+#'   )
+#' )
+#' plot_faust_count(
+#'   project_path = project_path,
+#'   pop = pop
+#' )
 #' @export
 plot_faust_count <- function(project_path,
                              pop,
                              font_size = 10,
                              point_size_max = 2,
                              breaks = NULL,
-                             trans_x = 'asinh',
+                             trans_x = "asinh",
                              p_width = NULL,
                              p_height = NULL,
                              exhaustive = FALSE,
-                             limitsize = FALSE){
+                             limitsize = FALSE) {
   # =======================================
   # Checks
   # =======================================
 
   # check that pop is either a character vector or a list of character vectors
-  if(!is.null(pop)){
-    if(is.character(pop)){
-      if(is.null(names(pop))) stop("Character vectors in pop must be named. Names are the markers (e.g. CD4) and values are the FAUST annotations (e.g. '+' or '-').")
+  if (!is.null(pop)) {
+    if (is.character(pop)) {
+      if (is.null(names(pop))) stop("Character vectors in pop must be named. Names are the markers (e.g. CD4) and values are the FAUST annotations (e.g. '+' or '-').")
     }
-    if(!is.character(pop)){
-      if(!is.list(pop)) stop('pop must be either a list of character vectors or a character vector, if not NULL.')
-      if(!all(purrr::map_lgl(pop, function(x) is.character(x)))){
-        stop('pop must be either a list of character vectors or a character vector, if not NULL.')
+    if (!is.character(pop)) {
+      if (!is.list(pop)) stop("pop must be either a list of character vectors or a character vector, if not NULL.")
+      if (!all(purrr::map_lgl(pop, function(x) is.character(x)))) {
+        stop("pop must be either a list of character vectors or a character vector, if not NULL.")
       }
     }
   }
@@ -93,20 +105,26 @@ plot_faust_count <- function(project_path,
   # =======================================
 
   # break_vec
-  if(is.null(breaks)) breaks <- c(0, 0.001, 0.005, 0.01, 0.02, 0.5, 0.1, 0.5, 1,
-                                  2, 5, 10, 20, 50, 100)
+  if (is.null(breaks)) {
+    breaks <- c(
+      0, 0.001, 0.005, 0.01, 0.02, 0.5, 0.1, 0.5, 1,
+      2, 5, 10, 20, 50, 100
+    )
+  }
 
   # base directory
-  dir_faust <- file.path(project_path, 'faustData')
+  dir_faust <- file.path(project_path, "faustData")
 
   # ==============================
   # Subsetting
   # ==============================
 
-  count_tbl_subset <- get_pop_counts(project_path = project_path,
-                                     pop = pop,
-                                     dem_col = c('sample', 'exp_unit', 'tot_count'),
-                                     exhaustive = exhaustive)
+  count_tbl_subset <- get_pop_counts(
+    project_path = project_path,
+    pop = pop,
+    dem_col = c("sample", "exp_unit", "tot_count"),
+    exhaustive = exhaustive
+  )
 
   # =================================
   # Plot preparation
@@ -115,32 +133,39 @@ plot_faust_count <- function(project_path,
   # pivot longer and calculate prop and freq
   count_tbl_long <- count_tbl_subset %>%
     tidyr::pivot_longer(-c(sample:tot_count),
-                        names_to = "pop",
-                        values_to = "count") %>%
+      names_to = "pop",
+      values_to = "count"
+    ) %>%
     dplyr::group_by(sample, tot_count) %>%
-    dplyr::mutate(prop = count/tot_count,
-                  perc = prop * 100) %>%
+    dplyr::mutate(
+      prop = count / tot_count,
+      perc = prop * 100
+    ) %>%
     dplyr::ungroup()
 
   # remove from sub-population annotation the markers
 
   # get the name of the overall population
-  if(is.null(pop)){
+  if (is.null(pop)) {
     title <- "Frequencies of all FAUST subsets"
-  } else{
+  } else {
     title <- ifelse(is.list(pop), "Frequencies of subsets",
-                    paste0(.collapse_pop(pop = pop, search = FALSE),
-                           collapse = ""))
+      paste0(.collapse_pop(pop = pop, search = FALSE),
+        collapse = ""
+      )
+    )
   }
 
   # get the breaks
-  breaks <- c(signif(min(count_tbl_long$perc), 2),
-              breaks,
-              signif(max(count_tbl_long$perc), 2)) %>%
-    unique
+  breaks <- c(
+    signif(min(count_tbl_long$perc), 2),
+    breaks,
+    signif(max(count_tbl_long$perc), 2)
+  ) %>%
+    unique()
 
   # get the transformation
-  if(trans_x == 'asinh') trans_x <- trans_asinh
+  if (trans_x == "asinh") trans_x <- trans_asinh
 
   # =================================
   # Plot
@@ -151,33 +176,39 @@ plot_faust_count <- function(project_path,
     cowplot::theme_cowplot(font_size = font_size) +
     geom_boxplot(outlier.size = -1, size = 1) +
     geom_jitter(aes(col = pop, size = tot_count), alpha = 0.1) +
-    guides(colour = 'none') +
+    guides(colour = "none") +
     labs(x = "Percentage (total classified cells)", y = "Cell population") +
-    scale_x_continuous(trans = trans_x,
-                       breaks = function(lims){
-                         breaks[breaks >= min(lims) & breaks <= max(lims)]
-                       }) +
+    scale_x_continuous(
+      trans = trans_x,
+      breaks = function(lims) {
+        breaks[breaks >= min(lims) & breaks <= max(lims)]
+      }
+    ) +
     theme(axis.text.x = element_text(angle = 90)) +
-    cowplot::background_grid(major = 'x', minor = 'x') +
-    scale_size_area(name = 'Total classified cells',
-                    trans = trans_asinh,
-                    max_size = point_size_max) +
+    cowplot::background_grid(major = "x", minor = "x") +
+    scale_size_area(
+      name = "Total classified cells",
+      trans = trans_asinh,
+      max_size = point_size_max
+    ) +
     labs(title = title)
 
   # save plot
-  dir_save <- file.path(dir_faust, 'plotData', 'pop_stats')
-  if(exhaustive) dir_save <- paste0(dir_save, "-exhaustive")
-  if(!dir.exists(dir_save)) dir.create(dir_save, recursive = TRUE)
-  fn <-  file.path(dir_save, paste0(title, ".png"))
+  dir_save <- file.path(dir_faust, "plotData", "pop_stats")
+  if (exhaustive) dir_save <- paste0(dir_save, "-exhaustive")
+  if (!dir.exists(dir_save)) dir.create(dir_save, recursive = TRUE)
+  fn <- file.path(dir_save, paste0(title, ".png"))
   fn <- suppressWarnings(normalizePath(fn))
-  if(file.exists(fn)) file.remove(fn)
+  if (file.exists(fn)) file.remove(fn)
   n_pop <- ncol(count_tbl_subset) - 3
   p_height <- ifelse(is.null(p_height), max(5, n_pop * 1.25), p_height)
   p_width <- ifelse(is.null(p_width), 40, p_width)
-  cowplot::ggsave2(filename = fn,
-                   plot = p,
-                   height = p_height, width = p_width, units = 'cm',
-                   limitsize = limitsize)
+  cowplot::ggsave2(
+    filename = fn,
+    plot = p,
+    height = p_height, width = p_width, units = "cm",
+    limitsize = limitsize
+  )
 
   invisible(TRUE)
 }
@@ -185,9 +216,11 @@ plot_faust_count <- function(project_path,
 
 
 #' @title Create inverse hyperbolic sin transformation object
-trans_asinh <- scales::trans_new('trans_asinh',
-                                 function(x) asinh(x),
-                                 function(x) sinh(x))
+trans_asinh <- scales::trans_new(
+  "trans_asinh",
+  function(x) asinh(x),
+  function(x) sinh(x)
+)
 
 #' @title Get indices of columns that have a specified annotation
 #'
@@ -195,11 +228,10 @@ trans_asinh <- scales::trans_new('trans_asinh',
 #' @param pop \code{named character vector}. Names specify marker and values specify level, e.g. c("CD4" = "-", "CD8" = "+").
 #'
 #' @return \code{Integer vector}.
-.get_pop_match_ind <- function(data, pop){
+.get_pop_match_ind <- function(data, pop) {
   pop_search_vec <- .collapse_pop(pop = pop, search = TRUE)
-  purrr::map_lgl(colnames(data), function(pop_curr){
-    stringr::str_detect(pop_curr, pop_search_vec) %>% all
+  purrr::map_lgl(colnames(data), function(pop_curr) {
+    stringr::str_detect(pop_curr, pop_search_vec) %>% all()
   }) %>%
-    which
+    which()
 }
-

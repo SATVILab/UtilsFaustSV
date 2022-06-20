@@ -67,19 +67,31 @@ individual subsets.
 \examples{
 project_path <- usethis::proj_path(ext = "/inst/extdata")
 # plot all subsets of pop, as it is a character vector
-pop <- c("CD3" = "+", "CD4" = "+", "CD8-IgD" = "-",
-         "CD20" = "-", "CD33" = "-", "CD14" = "-",
-         "TCRgd-CD19" = "-")
-plot_faust_count(project_path = project_path,
-                 pop = pop)
+pop <- c(
+  "CD3" = "+", "CD4" = "+", "CD8-IgD" = "-",
+  "CD20" = "-", "CD33" = "-", "CD14" = "-",
+  "TCRgd-CD19" = "-"
+)
+plot_faust_count(
+  project_path = project_path,
+  pop = pop
+)
 # plot counts of cells matching annotation of each
 # element in pop, as pop is a list
-pop <- list(c("CD3" = "+", "CD4" = "+", "CD8-IgD" = "-",
-"CD20" = "-", "CD33" = "-", "CD14" = "-",
-"TCRgd-CD19" = "-"),
-c("CD3" = "+", "CD4" = "-", "CD8-IgD" = "+",
-  "CD20" = "-", "CD33" = "-", "CD14" = "-",
- "TCRgd-CD19" = "-"))
-plot_faust_count(project_path = project_path,
-pop = pop)
+pop <- list(
+  c(
+    "CD3" = "+", "CD4" = "+", "CD8-IgD" = "-",
+    "CD20" = "-", "CD33" = "-", "CD14" = "-",
+    "TCRgd-CD19" = "-"
+  ),
+  c(
+    "CD3" = "+", "CD4" = "-", "CD8-IgD" = "+",
+    "CD20" = "-", "CD33" = "-", "CD14" = "-",
+    "TCRgd-CD19" = "-"
+  )
+)
+plot_faust_count(
+  project_path = project_path,
+  pop = pop
+)
 }
