@@ -5,6 +5,14 @@
 #' as an FCS file for all samples gated or just a specified subset.
 #'
 #' @param project_path character. FAUST project directory.
+#' @param dir_save character.
+#' Directory to save to.
+#' If \code{NULL} (the default), then FCS files
+#' are saved to \code{file.path(project_path, "faustData", "fcsData", <pop_defn>)},
+#' where \code{<pop_defn>} is a concatenation of the population
+#' definition, e.g list(c("CD3" = 1, "CD4" = 2)) becomes "CD3~1~CD4~2~".
+#' If \code{character}, then the FCS files are saved directly to this directory.
+#' As stated before, default is \code{NULL}.
 #' @param fr_source GatingSet or character vector. If a \code{GatingSet}, then
 #' the flowFrames within the GatingSet are used to create the output fcs files.
 #' If a character vector, then must specify a directory containing FCS files. These FCS
@@ -31,6 +39,7 @@
 #'
 #' @export
 save_faust_pop <- function(project_path,
+                           dir_save = NULL,
                            pop,
                            fr_source = NULL,
                            sample = NULL,
@@ -144,12 +153,14 @@ save_faust_pop <- function(project_path,
 
 
   #  create directory
-  dir_save <- file.path(
-    project_path,
-    "faustData",
-    "fcsData",
-    pop_name
-  )
+  if (is.null(dir_save)) {
+    dir_save <- file.path(
+      project_path,
+      "faustData",
+      "fcsData",
+      pop_name
+    )
+  }
   if (!dir.exists(dir_save)) dir.create(dir_save, recursive = TRUE)
 
   # =============================
@@ -194,7 +205,9 @@ save_faust_pop <- function(project_path,
     # get initial data
     # if(!is.null(gs)){
     if (class(fr_source) == "GatingSet") {
-      fr <- try(flowWorkspace::gh_pop_get_data(fr_source[[which(sample_name == sample)]]))
+      fr <- try(flowWorkspace::gh_pop_get_data(
+        fr_source[[which(sample_name == sample)]]
+      ))
     } else if (class(fr_source) == "character") {
       fr <- purrr::map(fr_source, function(fr_source_curr) {
         fr_path <- file.path(fr_source_curr, sample)

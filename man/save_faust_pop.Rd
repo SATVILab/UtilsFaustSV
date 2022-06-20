@@ -6,6 +6,7 @@
 \usage{
 save_faust_pop(
   project_path,
+  dir_save = NULL,
   pop,
   fr_source = NULL,
   sample = NULL,
@@ -15,6 +16,15 @@ save_faust_pop(
 }
 \arguments{
 \item{project_path}{character. FAUST project directory.}
+
+\item{dir_save}{character.
+Directory to save to.
+If \code{NULL} (the default), then FCS files
+are saved to \code{file.path(project_path, "faustData", "fcsData", <pop_defn>)},
+where \code{<pop_defn>} is a concatenation of the population
+definition, e.g list(c("CD3" = 1, "CD4" = 2)) becomes "CD3~1~CD4~2~".
+If \code{character}, then the FCS files are saved directly to this directory.
+As stated before, default is \code{NULL}.}
 
 \item{pop}{\code{list} or \code{named character vector}. If a \code{character vector},
 then all cells matching the set of marker levels are returned. If a \code{list}, then each
