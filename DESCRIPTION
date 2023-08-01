@@ -1,7 +1,7 @@
 Package: UtilsFaustSV
 Type: Package
 Title: Additional functions to extract and plot FAUST output
-Version: 0.1.0
+Version: 0.1.0-1
 Author: Miguel Rodo
 Maintainer: Miguel Rodo <rdxmig002@myuct.ac.za>
 Description: Provides functions to extract populations identified 
@@ -10,9 +10,7 @@ Description: Provides functions to extract populations identified
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: 
-    flowCore,
-    flowWorkspace,
+Imports:
     stringr,
     ggplot2,
     magrittr,
