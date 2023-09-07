@@ -1,6 +1,7 @@
 #' @title Get a searchable version of the marker levels
 #'
 #' @description
+#' 
 #'
 #' @inheritParams plot_faust_count
 #' @param search logical. If \code{TRUE}, then square brackets are concatenated
