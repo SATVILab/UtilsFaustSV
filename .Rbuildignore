@@ -1,5 +1,11 @@
+^renv$
+^renv\.lock$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^\.Rproj\.user/*$
 ^README\.Rmd$
+^scripts
+$renv
+$\.devcontainer
+$_dependencies\.R$
