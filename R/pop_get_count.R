@@ -28,12 +28,14 @@
 #' pop <- list(c("CD4" = "-", "CD8" = "+"), c("CD8" = "-", "CD4" = "+"))
 #' get_pop_counts(pop = pop)
 #' @export
-get_pop_counts <- function(project_path = NULL, data = NULL, pop = NULL,
-                           dem_col = c(
-                             "sample", "exp_unit", "tot_count", "tot_count_classified",
-                             "sampleName", "experimentalUnit"
-                           ),
-                           exhaustive = FALSE) {
+faust_pop_get_count <- function(project_path = NULL,
+                                data = NULL,
+                                pop = NULL,
+                                dem_col = c(
+                                  "sample", "exp_unit", "tot_count", "tot_count_classified",
+                                  "sampleName", "experimentalUnit"
+                                ),
+                                exhaustive = FALSE) {
 
   # read in data
   if (is.null(data)) {

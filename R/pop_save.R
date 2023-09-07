@@ -38,13 +38,13 @@
 #' )
 #'
 #' @export
-save_faust_pop <- function(project_path,
-                           dir_save = NULL,
-                           pop,
-                           fr_source = NULL,
-                           sample = NULL,
-                           trans_fn = NULL,
-                           trans_chnl = NULL) {
+faust_pop_save_fcs <- function(project_path,
+                               dir_save = NULL,
+                               pop,
+                               fr_source = NULL,
+                               sample = NULL,
+                               trans_fn = NULL,
+                               trans_chnl = NULL) {
 
   # =============================
   # Check

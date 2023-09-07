@@ -9,10 +9,10 @@
 #'
 #' @return \code{Character vector}
 #' @export
-get_faust_markers_and_levels <- function(project_path) {
-
-  #
-  cluster_name <- readRDS(file.path(project_path, "faustData", "metaData", "scampClusterNames.rds"))[1]
+faust_get_marker <- function(project_path) {
+  cluster_name <- readRDS(file.path(
+    project_path, "faustData", "metaData", "scampClusterNames.rds"
+    ))[1]
 
   # all channels considered
   active_chnl_vec <- readRDS(file.path(project_path, "faustData", "metaData", "activeChannels.rds"))
@@ -29,4 +29,16 @@ get_faust_markers_and_levels <- function(project_path) {
     n_level_vec[i] <- as.numeric(stringr::str_sub(cluster_name, n_level_loc, n_level_loc))
   }
   n_level_vec
+}
+
+faust_get_count <- function(project_path, exhaustive = FALSE) {
+  path_mat <- file.path(
+    project_path,
+    switch(as.character(exhaustive),
+      "TRUE" = "exhaustiveFaustCountMatrix.rds",
+      "FALSE" = "faustCountMatrix.rds",
+      stop("exhaustive argument must be TRUE or FALSE")
+    )
+  )
+  readRDS(path_mat)
 }

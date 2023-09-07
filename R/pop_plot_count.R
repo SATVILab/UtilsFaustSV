@@ -72,16 +72,16 @@
 #'   pop = pop
 #' )
 #' @export
-plot_faust_count <- function(project_path,
-                             pop,
-                             font_size = 10,
-                             point_size_max = 2,
-                             breaks = NULL,
-                             trans_x = "asinh",
-                             p_width = NULL,
-                             p_height = NULL,
-                             exhaustive = FALSE,
-                             limitsize = FALSE) {
+faust_pop_plot_count <- function(project_path,
+                                 pop,
+                                 font_size = 10,
+                                 point_size_max = 2,
+                                 breaks = NULL,
+                                 trans_x = "asinh",
+                                 p_width = NULL,
+                                 p_height = NULL,
+                                 exhaustive = FALSE,
+                                 limitsize = FALSE) {
   # =======================================
   # Checks
   # =======================================
