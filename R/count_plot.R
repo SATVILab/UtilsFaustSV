@@ -86,7 +86,7 @@
 #'   pop = pop
 #' )
 #' @export
-faust_plot_count <- function(project_path,
+faust_count_plot <- function(project_path,
                              pop,
                              font_size = 10,
                              point_size_max = 2,
@@ -137,7 +137,7 @@ faust_plot_count <- function(project_path,
   # Subsetting
   # ==============================
 
-  count_tbl_subset <- get_pop_counts(
+  count_tbl_subset <- faust_count_get_pop(
     project_path = project_path,
     pop = pop,
     dem_col = c("sample", "exp_unit", "tot_count"),

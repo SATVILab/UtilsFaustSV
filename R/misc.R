@@ -4,7 +4,7 @@
 #' Get a searchable version of the marker levels
 #'
 #'
-#' @inheritParams faust_plot_count
+#' @inheritParams faust_count_plot
 #' @param search logical. If \code{TRUE}, then square brackets are concatenated
 #' around each of the elements in the level strings.
 #'
