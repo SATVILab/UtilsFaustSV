@@ -9,7 +9,9 @@
 \arguments{
 \item{data}{dataframe. Columns containg FAUST-population counts.}
 
-\item{pop}{\code{named character vector}. Names specify marker and values specify level, e.g. c("CD4" = "-", "CD8" = "+").}
+\item{pop}{\code{named character vector}.
+Names specify marker and values specify level,
+e.g. c("CD4" = "-", "CD8" = "+").}
 }
 \value{
 \code{Integer vector}.

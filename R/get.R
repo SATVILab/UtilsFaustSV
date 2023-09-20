@@ -5,12 +5,12 @@
 #' Note that it only works after the SCAMP clustering has been performed, i.e.
 #' not simply after the annotations have been approved.
 #'
-#' @inheritParams save_faust_pop
+#' @inheritParams faust_fcs_write
 #'
 #' @return \code{Character vector}
 #' @export
-faust_get_marker <- function(project_path) {
-  dir_metadata <- file.path(project_path, "faustData", "metaData  ")
+faust_marker_get_used <- function(project_path) {
+  dir_metadata <- file.path(project_path, "faustData", "metaData")
   cluster_name <- readRDS(file.path(
     dir_metadata, "scampClusterNames.rds"
   ))[1]
@@ -42,7 +42,7 @@ faust_get_marker <- function(project_path) {
   n_level_vec
 }
 
-faust_get_count <- function(project_path, exhaustive = FALSE) {
+faust_count_get <- function(project_path, exhaustive = FALSE) {
   path_mat <- file.path(
     project_path,
     switch(as.character(exhaustive),

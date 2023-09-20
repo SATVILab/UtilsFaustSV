@@ -1,6 +1,6 @@
 #' @title Get counts of subsets identified by FAUST
 #'
-#' @inheritParams save_faust_pop
+#' @inheritParams faust_fcs_write
 #' @param data dataframe. Dataframe where columns specify counts. If \code{NULL},
 #' then it is read in from \code{project_path/faustData/faustCountMatrix.rds}.
 #' @param pop \code{named character vector} or \code{list}.
@@ -39,18 +39,18 @@
 #' pop <- list(c("CD4" = "-", "CD8" = "+"), c("CD8" = "-", "CD4" = "+"))
 #' get_pop_counts(pop = pop)
 #' @export
-faust_pop_get_count <- function(project_path = NULL,
-                                data = NULL,
-                                pop = NULL,
-                                dem_col = c(
-                                  "sample",
-                                  "exp_unit",
-                                  "tot_count",
-                                  "tot_count_classified",
-                                  "sampleName",
-                                  "experimentalUnit"
-                                ),
-                                exhaustive = FALSE) {
+faust_fcs_write <- function(project_path = NULL,
+                            data = NULL,
+                            pop = NULL,
+                            dem_col = c(
+                              "sample",
+                              "exp_unit",
+                              "tot_count",
+                              "tot_count_classified",
+                              "sampleName",
+                              "experimentalUnit"
+                            ),
+                            exhaustive = FALSE) {
   # read in data
   if (is.null(data)) {
     if (is.null(project_path)) {

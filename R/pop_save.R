@@ -1,50 +1,61 @@
 #' @title Save FAUST subset as an FCS file
 #'
 #' @description
-#' Save a specified FAUST-identified population to \code{project_path/faustData/fcsData}
+#' Save a specified FAUST-identified population to
+#' \code{project_path/faustData/fcsData}
 #' as an FCS file for all samples gated or just a specified subset.
 #'
 #' @param project_path character. FAUST project directory.
 #' @param dir_save character.
 #' Directory to save to.
 #' If \code{NULL} (the default), then FCS files
-#' are saved to \code{file.path(project_path, "faustData", "fcsData", <pop_defn>)},
+#' are saved to
+#' \code{file.path(project_path, "faustData", "fcsData", <pop_defn>)},
 #' where \code{<pop_defn>} is a concatenation of the population
 #' definition, e.g list(c("CD3" = 1, "CD4" = 2)) becomes "CD3~1~CD4~2~".
 #' If \code{character}, then the FCS files are saved directly to this directory.
 #' As stated before, default is \code{NULL}.
 #' @param fr_source GatingSet or character vector. If a \code{GatingSet}, then
 #' the flowFrames within the GatingSet are used to create the output fcs files.
-#' If a character vector, then must specify a directory containing FCS files. These FCS
+#' If a character vector,
+#' then must specify a directory containing FCS files. These FCS
 #' files are used to create the output fcs files.
-#' @param pop \code{list} or \code{named character vector}. If a \code{character vector},
-#' then all cells matching the set of marker levels are returned. If a \code{list}, then each
+#' @param pop \code{list} or \code{named character vector}.
+#' If a \code{character vector},
+#' then all cells matching the set of marker levels are returned.
+#' If a \code{list}, then each
 #' element must be a \code{character vector}, and then
-#' all cells matching either of these specified sets of marker levels are returned.
-#' @param sample integer vector or character vector. If an integer vector, then it
+#' all cells matching either of
+#' these specified sets of marker levels are returned.
+#' @param sample integer vector or character vector.
+#' If an integer vector, then it
 #' specifies the indices of the samples for which to save output. If character,
 #' then it specifies the names of the sames to save output for. If \code{NULL},
 #' then the output for every sample is saved. Default is \code{NULL}.
-#' @param trans_fn function. If supplied, this function is applied to the expression data.
-#' Useful for back-transformation. If \code{NULL}, then no transformation is applied. Default is \code{NULL}.
-#' @param trans_chnl character vector. If specified, \code{trans_fn} is applied to only these channels.
-#' If \code{NULL} and if \code{trans_fn} is not \code{NULL}, then \code{trans_fn} is applied to entire
+#' @param trans_fn function. If supplied, this function
+#' is applied to the expression data.
+#' Useful for back-transformation.
+#' If \code{NULL}, then no transformation is applied. Default is \code{NULL}.
+#' @param trans_chnl character vector.
+#' If specified, \code{trans_fn} is applied to only these channels.
+#' If \code{NULL} and if \code{trans_fn} is not \code{NULL},
+#' then \code{trans_fn} is applied to entire
 #' expression matrix. Default is \code{NULL}.
 #'
 #' @return \code{invisible(TRUE)}. Side effect is the saved FCS file.
-#' @examples save_faust_pop(
+#' @examples faust_fcs_write(
 #'   project_path = "", pop = list("CD3" = 2),
 #'   gs = gs, sample = 1
 #' )
 #'
 #' @export
-faust_pop_save_fcs <- function(project_path,
-                               dir_save = NULL,
-                               pop,
-                               fr_source = NULL,
-                               sample = NULL,
-                               trans_fn = NULL,
-                               trans_chnl = NULL) {
+faust_fcs_write <- function(project_path,
+                            dir_save = NULL,
+                            pop,
+                            fr_source = NULL,
+                            sample = NULL,
+                            trans_fn = NULL,
+                            trans_chnl = NULL) {
   # =============================
   # Check
   # =============================
@@ -170,7 +181,7 @@ faust_pop_save_fcs <- function(project_path,
   # Save FAUST pops
   # =============================
 
-  .save_faust_pop(
+  .faust_fcs_write(
     project_path = project_path, fr_source = fr_source,
     sample_name = sample_name_vec,
     sel_sample = sel_sample_vec,
@@ -183,7 +194,7 @@ faust_pop_save_fcs <- function(project_path,
 
 #' @title Save FAUST subset as an FCS file
 #'
-#' @inheritParams save_faust_pop
+#' @inheritParams faust_fcs_write
 #' @param sel_sample \code{character vector}. Character vector specifying
 #' the names of the samples
 #' (as saved by FAUST as folder names in the analysis map
@@ -197,14 +208,14 @@ faust_pop_save_fcs <- function(project_path,
 #' in which they are found in \code{gs}.
 #'
 #' @return \code{invisible(TRUE)}.
-.save_faust_pop <- function(project_path,
-                            fr_source,
-                            sample_name,
-                            sel_sample,
-                            pop,
-                            dir_save,
-                            trans_fn = NULL,
-                            trans_chnl = NULL) {
+.faust_fcs_write <- function(project_path,
+                             fr_source,
+                             sample_name,
+                             sel_sample,
+                             pop,
+                             dir_save,
+                             trans_fn = NULL,
+                             trans_chnl = NULL) {
   # extract data, filter and save
   for (sample in sel_sample) {
     # get initial data
@@ -295,7 +306,7 @@ faust_pop_save_fcs <- function(project_path,
 #' <project_path>/faustData/sampleData/.
 #' @param ex \code{matrix}.
 #' Matrix containing marker expression values for \code{sample}.
-#' @inheritParams save_faust_pop
+#' @inheritParams faust_fcs_write
 #'
 #' @details
 #' This is effectively an inclusive OR statement across the different population
@@ -328,7 +339,6 @@ faust_pop_save_fcs <- function(project_path,
 #' @title Check if FAUST annotation has a given level for a set of markers
 #'
 #' @inheritParams .get_faust_pop
-#' @inheritParams .get_faust_pop_pop
 #' @param pop \code{named character vector}.
 #' Names are marker names and values are
 #' levels of marker.

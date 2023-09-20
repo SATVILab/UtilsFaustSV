@@ -1,13 +1,12 @@
 #' @title Get a searchable version of the marker levels
 #'
 #' @description
+#' Get a searchable version of the marker levels
 #'
 #'
-#' @inheritParams plot_faust_count
+#' @inheritParams faust_plot_count
 #' @param search logical. If \code{TRUE}, then square brackets are concatenated
 #' around each of the elements in the level strings.
-#'
-#' @return
 #'
 #' @examples
 #' .collapse_pop(c("CD4" = "-", "CD3" = "-"), search = FALSE)

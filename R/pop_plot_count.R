@@ -4,7 +4,7 @@
 #' Saves plots of counts to \code{project_path/faustData/plotData/pop_stats}
 #' for specified FAUST-identified subsets.
 #'
-#' @inheritParams save_faust_pop
+#' @inheritParams faust_fcs_write
 #' @param pop \code{list} or \code{named character vector}.
 #' If a \code{character vector},
 #' then counts of all subsets matching the set of marker levels are plotted.
@@ -86,16 +86,16 @@
 #'   pop = pop
 #' )
 #' @export
-faust_pop_plot_count <- function(project_path,
-                                 pop,
-                                 font_size = 10,
-                                 point_size_max = 2,
-                                 breaks = NULL,
-                                 trans_x = "asinh",
-                                 p_width = NULL,
-                                 p_height = NULL,
-                                 exhaustive = FALSE,
-                                 limitsize = FALSE) {
+faust_plot_count <- function(project_path,
+                             pop,
+                             font_size = 10,
+                             point_size_max = 2,
+                             breaks = NULL,
+                             trans_x = "asinh",
+                             p_width = NULL,
+                             p_height = NULL,
+                             exhaustive = FALSE,
+                             limitsize = FALSE) {
   # =======================================
   # Checks
   # =======================================

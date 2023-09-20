@@ -7,6 +7,16 @@
 .collapse_pop(pop, search = FALSE)
 }
 \arguments{
+\item{pop}{\code{list} or \code{named character vector}.
+If a \code{character vector},
+then counts of all subsets matching the set of marker levels are plotted.
+If a \code{list}, then each list element must be a character vector.
+In that case,
+one boxplot of frequencies is plotted for each element of the list of
+where the frequency is
+the sum of all cells that match the population specified.
+If \code{NULL}, then all subsets found are plotted.}
+
 \item{search}{logical. If \code{TRUE}, then square brackets are concatenated
 around each of the elements in the level strings.}
 }
@@ -14,5 +24,6 @@ around each of the elements in the level strings.}
 Get a searchable version of the marker levels
 }
 \examples{
-.collapse_pop(c("CD4" = "-", CD3" = "-"), search = FALSE); .collapse_pop(c("CD4" = "-", CD3" = "-"), search = TRUE)
+.collapse_pop(c("CD4" = "-", "CD3" = "-"), search = FALSE)
+.collapse_pop(c("CD4" = "-", "CD3" = "-"), search = TRUE)
 }
