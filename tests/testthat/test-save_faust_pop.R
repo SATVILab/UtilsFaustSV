@@ -113,7 +113,7 @@ testthat::test_that("save_faust_pop works correctly", {
   # ==========================================
 
   # required objects
-  dir_proj <- usethis::proj_path(ext = "/tests/testthat")
+  dir_proj <- usethis::proj_path(ext = "./tests/testthat")
   gs <- flowWorkspace::load_gs(here::here("tests/testthat/gs_test"))
 
   # ==========================================

@@ -1,5 +1,5 @@
 test_that("plot_faust_count runs", {
-  proj_path <- usethis::proj_path("/tests/testthat")
+  proj_path <- usethis::proj_path("./tests/testthat")
   # character pop
   plot_faust_count(
     project_path = proj_path,

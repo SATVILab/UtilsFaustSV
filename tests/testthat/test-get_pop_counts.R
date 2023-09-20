@@ -1,6 +1,6 @@
 library(testthat)
 test_that("get_pop_counts works", {
-  dir_proj <- usethis::proj_path("/tests/testthat")
+  dir_proj <- usethis::proj_path("./tests/testthat")
 
   full_tbl <- get_pop_counts(dir_proj)
   cd4p_tbl <- get_pop_counts(
