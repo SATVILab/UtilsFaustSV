@@ -48,7 +48,6 @@
   )
 
   for (i in 1:2) {
-
     # get, subset and save flowFrame
     fr <- fs[[i]]
     ex <- flowCore::exprs(fr)
@@ -86,11 +85,12 @@
   }
 
   # save GatingSet
-  cs <- flowWorkspace::load_cytoset_from_fcs(list.files(file.path(
-    stringr::str_remove(dir_test, "/faustData"),
-    "fcsTest"
-  ),
-  pattern = ".fcs", full.names = TRUE
+  cs <- flowWorkspace::load_cytoset_from_fcs(list.files(
+    file.path(
+      stringr::str_remove(dir_test, "/faustData"),
+      "fcsTest"
+    ),
+    pattern = ".fcs", full.names = TRUE
   ))
   gs_test <- flowWorkspace::GatingSet(cs)
   flowWorkspace::save_gs(gs_test, path = here::here("tests/testthat/gs_test"))
@@ -108,7 +108,6 @@ if (!dir.exists(here::here("tests/testthat/gs_test"))) {
 # ================================
 
 testthat::test_that("save_faust_pop works correctly", {
-
   # ==========================================
   # Preparation
   # ==========================================

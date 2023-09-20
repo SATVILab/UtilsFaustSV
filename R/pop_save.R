@@ -45,7 +45,6 @@ faust_pop_save_fcs <- function(project_path,
                                sample = NULL,
                                trans_fn = NULL,
                                trans_chnl = NULL) {
-
   # =============================
   # Check
   # =============================
@@ -78,14 +77,15 @@ faust_pop_save_fcs <- function(project_path,
   #  # get vector of sample names in gs
   #  sample_name_vec <- active_sample_vec
   # } else{
-  active_sample_vec <- list.dirs(file.path(
-    project_path, "faustData",
-    "sampleData"
-  ),
-  recursive = FALSE, full.names = FALSE
+  active_sample_vec <- list.dirs(
+    file.path(
+      project_path, "faustData",
+      "sampleData"
+    ),
+    recursive = FALSE, full.names = FALSE
   )
   sel_sample_vec <- switch(typeof(sample),
-    "integer" =,
+    "integer" = ,
     "double" = active_sample_vec[sample],
     "NULL" = active_sample_vec,
     "character" = active_sample_vec[vapply(
@@ -122,7 +122,10 @@ faust_pop_save_fcs <- function(project_path,
         "~"
       )
     }
-  } else if (is.list(pop) && all(purrr::map_lgl(pop, function(x) is.character(x) || is.numeric(x)))) {
+  } else if (
+    is.list(pop) &&
+      all(purrr::map_lgl(pop, function(x) is.character(x) || is.numeric(x)))
+  ) {
     pop_name_vec <- purrr::map(pop, function(pop_curr) names(pop_curr)) %>%
       unlist() %>%
       unique()
@@ -136,7 +139,7 @@ faust_pop_save_fcs <- function(project_path,
       })
       pop_level_vec
     }) %>%
-      setNames(pop_name_vec)
+      stats::setNames(pop_name_vec)
 
     pop_name <- purrr::map_chr(seq_along(pop_level_list), function(i) {
       paste0(
@@ -182,11 +185,15 @@ faust_pop_save_fcs <- function(project_path,
 #'
 #' @inheritParams save_faust_pop
 #' @param sel_sample \code{character vector}. Character vector specifying
-#' the names of the samples (as saved by FAUST as folder names in the analysis map
-#' and equivalent to \code{gs[[i]]@name} where i is an index in \code{gs}.) that
+#' the names of the samples
+#' (as saved by FAUST as folder names in the analysis map
+#' and equivalent to \code{gs[[i]]@name}
+#' where i is an index in \code{gs}.) that
 #' are to have their FAUST pops saved.
-#' @param dir_save \code{character}. Specifies directory in which files are saved.
-#' @param sample_name \code{character vector}. Specifies names of samples in order
+#' @param dir_save \code{character}.
+#' Specifies directory in which files are saved.
+#' @param sample_name \code{character vector}.
+#' Specifies names of samples in order
 #' in which they are found in \code{gs}.
 #'
 #' @return \code{invisible(TRUE)}.
@@ -198,10 +205,8 @@ faust_pop_save_fcs <- function(project_path,
                             dir_save,
                             trans_fn = NULL,
                             trans_chnl = NULL) {
-
   # extract data, filter and save
   for (sample in sel_sample) {
-
     # get initial data
     # if(!is.null(gs)){
     if (class(fr_source) == "GatingSet") {
@@ -283,11 +288,13 @@ faust_pop_save_fcs <- function(project_path,
   invisible(TRUE)
 }
 
-#' @title Filter an expression matrix to return only cells matching one or more FAUST annotation combinations
+#' @title Filter an expression matrix to
+#' return only cells matching one or more FAUST annotation combinations
 #'
 #' @param sample \code{character}. Name of sample, as found in directory
 #' <project_path>/faustData/sampleData/.
-#' @param ex \code{matrix}. Matrix containing marker expression values for \code{sample}.
+#' @param ex \code{matrix}.
+#' Matrix containing marker expression values for \code{sample}.
 #' @inheritParams save_faust_pop
 #'
 #' @details
@@ -296,7 +303,6 @@ faust_pop_save_fcs <- function(project_path,
 #'
 #' @return Numeric matrix.
 .get_faust_pop <- function(ex, pop, faust_ann) {
-
   # vector to indicate if a match or not
   match <- rep(FALSE, nrow(ex))
   # if not a list, then make pop a list.
@@ -306,12 +312,13 @@ faust_pop_save_fcs <- function(project_path,
   if (is.character(pop) || is.numeric(pop)) pop <- list(pop)
   for (i in seq_along(pop)) {
     # set to TRUE if a match for given population
-    match <- match | .is_faust_ann_a_match_pop(faust_ann = faust_ann, pop = pop[[i]])
+    match <- match |
+      .is_faust_ann_a_match_pop(faust_ann = faust_ann, pop = pop[[i]])
   }
 
   if (sum(match) == 0) {
     ex <- ex[1, , drop = FALSE]
-    for (j in 1:ncol(ex)) ex[1, j] <- NA
+    for (j in seq_len(ncol(ex))) ex[1, j] <- NA
     return(ex)
   }
 
@@ -322,18 +329,21 @@ faust_pop_save_fcs <- function(project_path,
 #'
 #' @inheritParams .get_faust_pop
 #' @inheritParams .get_faust_pop_pop
-#' @param pop \code{named character vector}. Names are marker names and values are
-#' levels of marker. Values must be of the form or "<num_1>" or "<num_1>~<num_2>", where
-#' <num_1> is the level for the marker and <num_2> is the total number of levels for
+#' @param pop \code{named character vector}.
+#' Names are marker names and values are
+#' levels of marker.
+#' Values must be of the form or "<num_1>" or "<num_1>~<num_2>",
+#' where <num_1> is the level for the marker and
+#' <num_2> is the total number of levels for
 #' the marker.
 #'
 #' @details
-#' This is effectively an AND statement across all markers specified in the
+#' This is effectively an AND statement across
+#' all markers specified in the
 #' single FAUST population annotation.
 #'
 #' @importFrom stringr str_locate str_sub
 .is_faust_ann_a_match_pop <- function(faust_ann, pop) {
-
   # vector to save if a match or not.
   # initialise to all TRUE, and then set to
   # FALSE if no match for a given marker
@@ -353,7 +363,9 @@ faust_pop_save_fcs <- function(project_path,
 #' @inheritParams .get_faust_pop
 #' @param marker character. Name of marker.
 #' @param level character. Level of marker, e.g. "1", "2" or "3".
-.is_faust_ann_a_match_for_marker <- function(faust_ann, marker, level) {
+.is_faust_ann_a_match_for_marker <- function(faust_ann,
+                                             marker,
+                                             level) {
   k <- 1
   while (faust_ann[[1]][k] == "0_0_0_0_0") {
     if (k >= nrow(faust_ann)) {
@@ -362,7 +374,13 @@ faust_pop_save_fcs <- function(project_path,
     k <- k + 1
   }
   typical_cluster_annotation <- faust_ann[[1]][k]
-  faust_ann_level_loc_start <- stringr::str_locate(typical_cluster_annotation, marker)[, "end"][[1]] + 2
-  faust_ann_level <- stringr::str_sub(faust_ann[[1]], faust_ann_level_loc_start, faust_ann_level_loc_start + stringr::str_length(level) - 1)
+  faust_ann_level_loc_start <- stringr::str_locate(
+    typical_cluster_annotation, marker
+  )[, "end"][[1]] + 2
+  faust_ann_level <- stringr::str_sub(
+    faust_ann[[1]],
+    faust_ann_level_loc_start,
+    faust_ann_level_loc_start + nchar(level) - 1
+  )
   level == faust_ann_level
 }

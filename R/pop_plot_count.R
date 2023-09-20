@@ -1,33 +1,47 @@
 #' @title Plot counts of FAUST pops by sample
 #'
-#' @description Saves plots of counts to \code{project_path/faustData/plotData/pop_stats}
+#' @description
+#' Saves plots of counts to \code{project_path/faustData/plotData/pop_stats}
 #' for specified FAUST-identified subsets.
 #'
 #' @inheritParams save_faust_pop
-#' @param pop \code{list} or \code{named character vector}. If a \code{character vector},
+#' @param pop \code{list} or \code{named character vector}.
+#' If a \code{character vector},
 #' then counts of all subsets matching the set of marker levels are plotted.
-#' If a \code{list}, then each list element must be a character vector. In that case,
-#' one boxplot of frequencies is plotted for each element of the list of where the frequency is
+#' If a \code{list}, then each list element must be a character vector.
+#' In that case,
+#' one boxplot of frequencies is plotted for each element of the list of
+#' where the frequency is
 #' the sum of all cells that match the population specified.
 #' If \code{NULL}, then all subsets found are plotted.
 #' @param breaks numeric vector. If supplied, then this is the breaks
 #' for the x-axis. If not supplied, then the default breaks are used of
-#' \code{c(0, 0.001, 0.005, 0.01, 0.02, 0.5, 0.1, 0.5, 1, 2, 5, 10, 20, 50, 100)}.
-#' @param p_height \code{numeric}. Height of saved plot in cm. If \code{NULL}, then
+#' `c(0, 0.001, 0.005, 0.01, 0.02, 0.5, 0.1, 0.5, 1, 2, 5, 10, 20, 50, 100)``.
+#' @param p_height
+#' \code{numeric}. Height of saved plot in cm.
+#' If \code{NULL}, then
 #' it is set to \code{max(5, n_pop * 1.25)},
 #' where \code{n_pop} is the number of sub-populations in \code{pop}.
-#' @param p_width \code{numeric}. Width of saved plot in cm. If \code{NULL}, then set to 40.
-#' @param trans_x \code{character} or \code{Transformation} object (from \code{scales} package).
+#' @param p_width \code{numeric}.
+#' Width of saved plot in cm. If \code{NULL},
+#' then set to 40.
+#' @param trans_x
+#' \code{character} or \code{Transformation} object
+#' (from \code{scales} package).
 #' the name of a transformation object or the object itself. Built-in
 #' transformations include "asinh", "asn", "atanh", "boxcox", "date", "exp",
 #' "hms", "identity", "log", "log10", "log1p", "log2", "logit", "modulus",
 #' "probability", "probit", "pseudo_log", "reciprocal", "reverse", "sqrt" and
 #' "time". Default is \code{asinh}.
-#' @param exhaustive logical. If \code{TRUE}, then counts are taken from the exhaustive FAUST count matrix
-#' rather than the count matrix after excluding subsets that don't appear in sufficiently many
+#' @param exhaustive logical.
+#' If \code{TRUE}, then counts are taken from the exhaustive FAUST count matrix
+#' rather than the count matrix after excluding subsets that
+#' don't appear in sufficiently many
 #' experimental units. Default is \code{FALSE}.
-#' @param limitsize logical. If \code{TRUE}, then plots of size 125cm x 125cm or more are
-#' not saved but an error is returned when \code{cowplot::ggsave2} is run. Default
+#' @param limitsize logical.
+#' If \code{TRUE}, then plots of size 125cm x 125cm or more are
+#' not saved but an error is returned when \code{cowplot::ggsave2} is run.
+#' Default
 #' is \code{FALSE}.
 #'
 #' @details
@@ -89,12 +103,16 @@ faust_pop_plot_count <- function(project_path,
   # check that pop is either a character vector or a list of character vectors
   if (!is.null(pop)) {
     if (is.character(pop)) {
-      if (is.null(names(pop))) stop("Character vectors in pop must be named. Names are the markers (e.g. CD4) and values are the FAUST annotations (e.g. '+' or '-').")
+      if (is.null(names(pop))) {
+        stop("Character vectors in pop must be named. Names are the markers (e.g. CD4) and values are the FAUST annotations (e.g. '+' or '-').") # nolint
+      }
     }
     if (!is.character(pop)) {
-      if (!is.list(pop)) stop("pop must be either a list of character vectors or a character vector, if not NULL.")
+      if (!is.list(pop)) {
+        stop("pop must be either a list of character vectors or a character vector, if not NULL.") # nolint
+      }
       if (!all(purrr::map_lgl(pop, function(x) is.character(x)))) {
-        stop("pop must be either a list of character vectors or a character vector, if not NULL.")
+        stop("pop must be either a list of character vectors or a character vector, if not NULL.") # nolint
       }
     }
   }
@@ -225,7 +243,9 @@ trans_asinh <- scales::trans_new(
 #' @title Get indices of columns that have a specified annotation
 #'
 #' @param data dataframe. Columns containg FAUST-population counts.
-#' @param pop \code{named character vector}. Names specify marker and values specify level, e.g. c("CD4" = "-", "CD8" = "+").
+#' @param pop \code{named character vector}.
+#' Names specify marker and values specify level,
+#' e.g. c("CD4" = "-", "CD8" = "+").
 #'
 #' @return \code{Integer vector}.
 .get_pop_match_ind <- function(data, pop) {

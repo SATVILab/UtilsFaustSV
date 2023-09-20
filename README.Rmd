@@ -40,7 +40,7 @@ library(UtilsFaustSV)
 First save the directory FAUST saved results to:
 ```{r }
 # set the FAUST project path
-proj_path <- usethis::proj_path('tests/testthat')
+proj_path <- usethis::proj_path("tests/testthat")
 ```
 
 You can get the names of the markers FAUST used to cluster and the number of levels for each (after FAUST has clustered):
@@ -50,28 +50,38 @@ get_faust_markers_and_levels(project_path = proj_path)
 
 You can save FAUST-identified clusters as FCS files using only a subset of the markers (not run):
 ```{r , eval = FALSE}
-save_faust_pop(project_path = proj_path, pop = list("CD3" = 2, "CD4" = 2), 
-               gs = gs) # set gs to be the GatingSet FAUST clustered
+save_faust_pop(
+  project_path = proj_path, pop = list("CD3" = 2, "CD4" = 2),
+  gs = gs
+) # set gs to be the GatingSet FAUST clustered
 ```
 
 You can get a table of counts of FAUST-identified clusters defined
 using only a subset of the markers used (not run):
 ```{r , eval = FALSE}
-get_pop_counts(project_path = proj_path, 
-               pop = c("CD4" = "-", "CD8" = "+"))
+get_pop_counts(
+  project_path = proj_path,
+  pop = c("CD4" = "-", "CD8" = "+")
+)
 ```
 
 You can save plots of counts of FAUST-identified clusters, where the clusters are defined using only a subset of the markers (not run):
 ```{r, eval = FALSE}
 # plot all subsets that match these annotations individually
 pop <- c("CD3" = "+", "CD4" = "+", "CD8-IgD" = "-")
-plot_faust_count(project_path = proj_path,
-                 pop = pop)
+plot_faust_count(
+  project_path = proj_path,
+  pop = pop
+)
 
 # plot total counts of subsets that match these annotations
 # within each list element
-pop <- list(c("CD3" = "+", "CD4" = "+", "CD8-IgD" = "-"),
-           c("CD3" = "+", "CD4" = "-", "CD8-IgD" = "+"))
-plot_faust_count(project_path = proj_path,
-                 pop = pop)
+pop <- list(
+  c("CD3" = "+", "CD4" = "+", "CD8-IgD" = "-"),
+  c("CD3" = "+", "CD4" = "-", "CD8-IgD" = "+")
+)
+plot_faust_count(
+  project_path = proj_path,
+  pop = pop
+)
 ```
