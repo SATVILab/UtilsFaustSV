@@ -113,7 +113,7 @@ testthat::test_that("faust_fcs_write works correctly", {
   # ==========================================
 
   # required objects
-  dir_proj <- usethis::proj_path(ext = "./tests/testthat")
+  dir_proj <- usethis::proj_path("tests", "testthat")
   gs <- flowWorkspace::load_gs(here::here("tests/testthat/gs_test"))
 
   # ==========================================
