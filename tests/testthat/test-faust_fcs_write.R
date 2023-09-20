@@ -104,10 +104,10 @@ if (!dir.exists(here::here("tests/testthat/gs_test"))) {
 }
 
 # ================================
-# Test save_faust_pop function
+# Test faust_fcs_write function
 # ================================
 
-testthat::test_that("save_faust_pop works correctly", {
+testthat::test_that("faust_fcs_write works correctly", {
   # ==========================================
   # Preparation
   # ==========================================
@@ -121,7 +121,7 @@ testthat::test_that("save_faust_pop works correctly", {
   # ==========================================
 
   # run code for one sample
-  save_faust_pop(
+  faust_fcs_write(
     project_path = dir_proj,
     pop = c("CD8-IgD" = 2),
     sample = 1,
@@ -143,7 +143,7 @@ testthat::test_that("save_faust_pop works correctly", {
   # ==========================================
 
   # run code for same sample but for level 1 of CD8-IgD
-  save_faust_pop(
+  faust_fcs_write(
     project_path = dir_proj,
     pop = c("CD8-IgD" = 1),
     sample = 1,
@@ -168,7 +168,7 @@ testthat::test_that("save_faust_pop works correctly", {
   # ==========================================
 
   # run code for same sample but for level 1 of CD8-IgD
-  save_faust_pop(
+  faust_fcs_write(
     project_path = dir_proj,
     pop = c("CD3" = 2),
     sample = "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs",
@@ -192,7 +192,7 @@ testthat::test_that("save_faust_pop works correctly", {
   # ==========================================
 
   # run code for same sample but for level 1 of CD8-IgD
-  save_faust_pop(
+  faust_fcs_write(
     project_path = dir_proj,
     pop = c("CD4" = 1),
     sample = NULL,
@@ -223,7 +223,7 @@ testthat::test_that("save_faust_pop works correctly", {
   # ==========================================
 
   # run code for same sample but for level 1 of CD8-IgD
-  save_faust_pop(
+  faust_fcs_write(
     project_path = dir_proj,
     pop = list(
       c("CD8-IgD" = 1),
@@ -251,7 +251,7 @@ testthat::test_that("save_faust_pop works correctly", {
 
   # preliminary check that first pop is of size 4 and second of size 0
   # run code for same sample but for level 1 of CD8-IgD
-  save_faust_pop(
+  faust_fcs_write(
     project_path = dir_proj,
     pop = c("CD3" = 2, "CD8-IgD" = 1),
     sample = 1,
@@ -271,7 +271,7 @@ testthat::test_that("save_faust_pop works correctly", {
   unlink(dir_fcs, recursive = TRUE)
 
   # run code for same sample but for level 1 of CD8-IgD
-  save_faust_pop(
+  faust_fcs_write(
     project_path = dir_proj,
     pop = c("CD3" = 1, "CD8-IgD" = 2),
     sample = 1,
@@ -292,7 +292,7 @@ testthat::test_that("save_faust_pop works correctly", {
   unlink(dir_fcs, recursive = TRUE)
 
   # run code for same sample but for level 1 of CD8-IgD
-  save_faust_pop(
+  faust_fcs_write(
     project_path = dir_proj,
     pop = list(
       c("CD3" = 2, "CD8-IgD" = 1),

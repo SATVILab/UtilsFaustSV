@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # UtilsFaustSV
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/SATVILab/UtilsFaustSV/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SATVILab/UtilsFaustSV/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of UtilsFaustSV is to provide convenient functions to interrogate a FAUST clustering and extract output from it.

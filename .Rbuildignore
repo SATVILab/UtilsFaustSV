@@ -10,3 +10,4 @@ $renv
 $\.devcontainer
 $_dependencies\.R$
 ^SCRATCH\.R$
+^\.github$
