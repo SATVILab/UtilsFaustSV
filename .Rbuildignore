@@ -9,3 +9,4 @@
 $renv
 $\.devcontainer
 $_dependencies\.R$
+^SCRATCH\.R$
