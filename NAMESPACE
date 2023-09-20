@@ -2,7 +2,7 @@
 
 export(faust_count_get_pop)
 export(faust_fcs_write)
-export(faust_marker_get_used)
+export(faust_marker_get_usage)
 export(faust_plot_count)
 import(ggplot2)
 import(scales)

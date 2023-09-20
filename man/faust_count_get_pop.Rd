@@ -16,7 +16,8 @@ faust_count_get_pop(
 \arguments{
 \item{project_path}{character. FAUST project directory.}
 
-\item{data}{dataframe. Dataframe where columns specify counts. If \code{NULL},
+\item{data}{dataframe.
+Dataframe where columns specify counts. If \code{NULL},
 then it is read in from \code{project_path/faustData/faustCountMatrix.rds}.}
 
 \item{pop}{\code{named character vector} or \code{list}.

@@ -1,7 +1,8 @@
 #' @title Get counts of subsets identified by FAUST
 #'
 #' @inheritParams faust_fcs_write
-#' @param data dataframe. Dataframe where columns specify counts. If \code{NULL},
+#' @param data dataframe.
+#' Dataframe where columns specify counts. If \code{NULL},
 #' then it is read in from \code{project_path/faustData/faustCountMatrix.rds}.
 #' @param pop \code{named character vector} or \code{list}.
 #' If a \code{character vector},

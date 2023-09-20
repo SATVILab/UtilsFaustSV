@@ -9,7 +9,7 @@
 #'
 #' @return \code{Character vector}
 #' @export
-faust_marker_get_used <- function(project_path) {
+faust_marker_get_usage <- function(project_path) {
   dir_metadata <- file.path(project_path, "faustData", "metaData")
   cluster_name <- readRDS(file.path(
     dir_metadata, "scampClusterNames.rds"

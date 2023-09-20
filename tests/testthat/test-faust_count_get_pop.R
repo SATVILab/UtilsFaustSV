@@ -1,13 +1,12 @@
-library(testthat)
 test_that("get_pop_counts works", {
   dir_proj <- usethis::proj_path("./tests/testthat")
 
-  full_tbl <- get_pop_counts(dir_proj)
-  cd4p_tbl <- get_pop_counts(
+  full_tbl <- faust_count_get_pop(dir_proj)
+  cd4p_tbl <- faust_count_get_pop(
     project_path = dir_proj,
     pop = c("CD4" = "+")
   )
-  cd4n_tbl <- get_pop_counts(
+  cd4n_tbl <- faust_count_get_pop(
     project_path = dir_proj,
     pop = c("CD4" = "-")
   )
@@ -37,15 +36,15 @@ test_that("get_pop_counts works", {
   )
 
   # list
-  cd4p_tbl <- get_pop_counts(
+  cd4p_tbl <- faust_count_get_pop(
     project_path = dir_proj,
     pop = list(c("CD4" = "+"))
   )
-  cd4n_tbl <- get_pop_counts(
+  cd4n_tbl <- faust_count_get_pop(
     project_path = dir_proj,
     pop = list(c("CD4" = "-"))
   )
-  cd4_tbl <- get_pop_counts(
+  cd4_tbl <- faust_count_get_pop(
     project_path = dir_proj,
     pop = list(
       c("CD4" = "+"),
@@ -58,7 +57,7 @@ test_that("get_pop_counts works", {
   expect_identical(colnames(cd4n_tbl)[[5]], "CD4-")
   expect_identical(colnames(cd4_tbl)[5:6], c("CD4+", "CD4-"))
 
-  cd4n_hladr_tbl <- get_pop_counts(
+  cd4n_hladr_tbl <- faust_count_get_pop(
     project_path = dir_proj,
     pop = list(
       c("CD4" = "-", "HLA-DR-beads" = "-"),

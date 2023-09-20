@@ -1,5 +1,5 @@
-test_that("faust_get_marker works", {
-  marker_nlevel_vec <- faust_get_marker_used(
+test_that("faust_marker_get_usage works", {
+  marker_nlevel_vec <- faust_marker_get_usage(
     usethis::proj_path("./tests/testthat")
   )
   marker_vec <- c(
