@@ -1,4 +1,5 @@
 #' @title Get counts of subsets identified by FAUST
+#' @rdname faust_count_get
 #'
 #' @inheritParams faust_fcs_write
 #' @param data dataframe.
@@ -163,4 +164,18 @@ faust_count_get_pop <- function(project_path = NULL,
     }
     return(data_out)
   }
+}
+
+#' @rdname faust_count_get
+#' @export
+faust_count_get <- function(project_path, exhaustive = FALSE) {
+  path_mat <- file.path(
+    project_path,
+    switch(as.character(exhaustive),
+      "TRUE" = "exhaustiveFaustCountMatrix.rds",
+      "FALSE" = "faustCountMatrix.rds",
+      stop("exhaustive argument must be TRUE or FALSE")
+    )
+  )
+  readRDS(path_mat)
 }
