@@ -20,11 +20,15 @@
 #' If a character vector,
 #' then must specify a directory containing FCS files. These FCS
 #' files are used to create the output fcs files.
-#' @param pop \code{list} or \code{named character vector}.
-#' If a \code{character vector},
+#' @param pop \code{list}, \code{named character vector} or unnamed character vector of length one.
+#' If an unnamed character vector,
+#' then all cells matching that full FAUST annotation will be returned
+#' (e.g. "CD3+CD8+CD45RA+IFNg+IL2-TNF+").
+#' If a named \code{character vector},
 #' then all cells matching the set of marker levels are returned.
+#' (names are markers, and elements are levels, e.g. c("CD3" = 2, "CD8" = 2)).
 #' If a \code{list}, then each
-#' element must be a \code{character vector}, and then
+#' element must be a named \code{character vector}, and then
 #' all cells matching either of
 #' these specified sets of marker levels are returned.
 #' @param sample integer vector or character vector.
