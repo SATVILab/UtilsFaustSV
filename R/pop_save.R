@@ -123,15 +123,19 @@ faust_fcs_write <- function(project_path,
 
   # get concatenated name of population
   if (!is.list(pop)) {
-    pop_name <- ""
-    for (i in seq_along(pop)) {
-      pop_name <- paste0(
-        pop_name,
-        names(pop)[i],
-        "~",
-        pop[[i]],
-        "~"
-      )
+    if (is.null(names(pop))) {
+      pop_name <- pop
+    } else {
+      pop_name <- ""
+      for (i in seq_along(pop)) {
+        pop_name <- paste0(
+          pop_name,
+          names(pop)[i],
+          "~",
+          pop[[i]],
+          "~"
+        )
+      }
     }
   } else if (
     is.list(pop) &&
@@ -357,6 +361,9 @@ faust_fcs_write <- function(project_path,
   # vector to save if a match or not.
   # initialise to all TRUE, and then set to
   # FALSE if no match for a given marker
+  if (is.null(names(pop))) {
+    return(faust_ann[[1]] == pop)
+  }
   match <- rep(TRUE, length(faust_ann))
   for (i in seq_along(pop)) {
     match <- match & .is_faust_ann_a_match_for_marker(
