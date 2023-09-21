@@ -48,7 +48,6 @@
   )
 
   for (i in 1:2) {
-
     # get, subset and save flowFrame
     fr <- fs[[i]]
     ex <- flowCore::exprs(fr)
@@ -86,11 +85,12 @@
   }
 
   # save GatingSet
-  cs <- flowWorkspace::load_cytoset_from_fcs(list.files(file.path(
-    stringr::str_remove(dir_test, "/faustData"),
-    "fcsTest"
-  ),
-  pattern = ".fcs", full.names = TRUE
+  cs <- flowWorkspace::load_cytoset_from_fcs(list.files(
+    file.path(
+      stringr::str_remove(dir_test, "/faustData"),
+      "fcsTest"
+    ),
+    pattern = ".fcs", full.names = TRUE
   ))
   gs_test <- flowWorkspace::GatingSet(cs)
   flowWorkspace::save_gs(gs_test, path = here::here("tests/testthat/gs_test"))
@@ -104,17 +104,16 @@ if (!dir.exists(here::here("tests/testthat/gs_test"))) {
 }
 
 # ================================
-# Test save_faust_pop function
+# Test faust_fcs_write function
 # ================================
 
-testthat::test_that("save_faust_pop works correctly", {
-
+testthat::test_that("faust_fcs_write works correctly", {
   # ==========================================
   # Preparation
   # ==========================================
 
   # required objects
-  dir_proj <- usethis::proj_path(ext = "/tests/testthat")
+  dir_proj <- usethis::proj_path("tests", "testthat")
   gs <- flowWorkspace::load_gs(here::here("tests/testthat/gs_test"))
 
   # ==========================================
@@ -122,7 +121,26 @@ testthat::test_that("save_faust_pop works correctly", {
   # ==========================================
 
   # run code for one sample
-  save_faust_pop(
+  pop_nm_detailed <-
+    "CD4~1~2~CD3~1~2~HLA-DR-beads~1~2~CD7~2~2~CD27~1~2~CD8-IgD~1~2~TCRgd-CD19~1~2~CD16~2~2~CD33~1~2~CD20~1~2~CCR7~1~2~CXCR5~1~2~CD45RA~1~2~CD14~1~2~" # nolint
+  faust_fcs_write(
+    project_path = dir_proj,
+    pop = pop_nm_detailed, # nolint
+    sample = 1,
+    fr_source = gs
+  )
+
+  # check that folders are created correctly
+  dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
+  expect_true(dir.exists(file.path(dir_fcs, pop_nm_detailed)))
+  expect_identical(
+    list.files(file.path(dir_fcs, pop_nm_detailed)),
+    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+  )
+  unlink(dir_fcs, recursive = TRUE)
+
+  # run code for one sample
+  faust_fcs_write(
     project_path = dir_proj,
     pop = c("CD8-IgD" = 2),
     sample = 1,
@@ -132,10 +150,19 @@ testthat::test_that("save_faust_pop works correctly", {
   # check that folders are created correctly
   dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
   expect_true(dir.exists(file.path(dir_fcs, "CD8-IgD~2~")))
-  expect_identical(list.files(file.path(dir_fcs, "CD8-IgD~2~")), "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs")
+  expect_identical(
+    list.files(file.path(dir_fcs, "CD8-IgD~2~")),
+    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+  )
 
   # check that object was saved correctly
-  fr <- flowCore::read.FCS(file.path(dir_fcs, "CD8-IgD~2~", "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"))
+  fr <- flowCore::read.FCS(
+    file.path(
+      dir_fcs,
+      "CD8-IgD~2~",
+      "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    )
+  )
   ex_2 <- flowCore::exprs(fr)
   expect_identical(nrow(ex_2), 7L)
 
@@ -144,7 +171,7 @@ testthat::test_that("save_faust_pop works correctly", {
   # ==========================================
 
   # run code for same sample but for level 1 of CD8-IgD
-  save_faust_pop(
+  faust_fcs_write(
     project_path = dir_proj,
     pop = c("CD8-IgD" = 1),
     sample = 1,
@@ -154,10 +181,19 @@ testthat::test_that("save_faust_pop works correctly", {
   # check that folders are created correctly
   dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
   expect_true(dir.exists(file.path(dir_fcs, "CD8-IgD~1~")))
-  expect_identical(list.files(file.path(dir_fcs, "CD8-IgD~1~")), "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs")
+  expect_identical(
+    list.files(file.path(dir_fcs, "CD8-IgD~1~")),
+    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+  )
 
   # check that object was saved correctly
-  fr <- flowCore::read.FCS(file.path(dir_fcs, "CD8-IgD~1~", "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"))
+  fr <- flowCore::read.FCS(
+    file.path(
+      dir_fcs,
+      "CD8-IgD~1~",
+      "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    )
+  )
   ex_1 <- flowCore::exprs(fr)
   expect_identical(nrow(ex_1), 8L)
   expect_identical(nrow(ex_2) + nrow(ex_1), 15L)
@@ -169,7 +205,7 @@ testthat::test_that("save_faust_pop works correctly", {
   # ==========================================
 
   # run code for same sample but for level 1 of CD8-IgD
-  save_faust_pop(
+  faust_fcs_write(
     project_path = dir_proj,
     pop = c("CD3" = 2),
     sample = "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs",
@@ -179,10 +215,18 @@ testthat::test_that("save_faust_pop works correctly", {
   # check that folders are created correctly
   dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
   expect_true(dir.exists(file.path(dir_fcs, "CD3~2~")))
-  expect_identical(list.files(file.path(dir_fcs, "CD3~2~")), "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs")
+  expect_identical(
+    list.files(file.path(dir_fcs, "CD3~2~")),
+    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+  )
 
   # check that object was saved correctly
-  fr <- flowCore::read.FCS(file.path(dir_fcs, "CD3~2~", "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"))
+  fr <- flowCore::read.FCS(
+    file.path(
+      dir_fcs, "CD3~2~",
+      "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    )
+  )
   ex <- flowCore::exprs(fr)
   expect_identical(nrow(ex), 11L)
 
@@ -193,7 +237,7 @@ testthat::test_that("save_faust_pop works correctly", {
   # ==========================================
 
   # run code for same sample but for level 1 of CD8-IgD
-  save_faust_pop(
+  faust_fcs_write(
     project_path = dir_proj,
     pop = c("CD4" = 1),
     sample = NULL,
@@ -209,11 +253,21 @@ testthat::test_that("save_faust_pop works correctly", {
   ))
 
   # check that object was saved correctly
-  fr <- flowCore::read.FCS(file.path(dir_fcs, "CD4~1~", "01-0993 D0 AND 07-1147 DAY0-pid1_mtbaux-debeaded_2.fcs"))
+  fr <- flowCore::read.FCS(
+    file.path(
+      dir_fcs, "CD4~1~",
+      "01-0993 D0 AND 07-1147 DAY0-pid1_mtbaux-debeaded_2.fcs"
+    )
+  )
   ex <- flowCore::exprs(fr)
   expect_identical(nrow(ex), 8L)
 
-  fr <- flowCore::read.FCS(file.path(dir_fcs, "CD4~1~", "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"))
+  fr <- flowCore::read.FCS(
+    file.path(
+      dir_fcs, "CD4~1~",
+      "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    )
+  )
   ex <- flowCore::exprs(fr)
   expect_identical(nrow(ex), 11L)
 
@@ -224,7 +278,7 @@ testthat::test_that("save_faust_pop works correctly", {
   # ==========================================
 
   # run code for same sample but for level 1 of CD8-IgD
-  save_faust_pop(
+  faust_fcs_write(
     project_path = dir_proj,
     pop = list(
       c("CD8-IgD" = 1),
@@ -237,10 +291,18 @@ testthat::test_that("save_faust_pop works correctly", {
   # check that folders are created correctly
   dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
   expect_true(dir.exists(file.path(dir_fcs, "CD8-IgD~12~")))
-  expect_identical(list.files(file.path(dir_fcs, "CD8-IgD~12~")), "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs")
+  expect_identical(
+    list.files(file.path(dir_fcs, "CD8-IgD~12~")),
+    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+  )
 
   # check that object was saved correctly
-  fr <- flowCore::read.FCS(file.path(dir_fcs, "CD8-IgD~12~", "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"))
+  fr <- flowCore::read.FCS(
+    file.path(
+      dir_fcs, "CD8-IgD~12~",
+      "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    )
+  )
   ex_1 <- flowCore::exprs(fr)
   expect_identical(nrow(ex_1), 15L)
 
@@ -252,7 +314,7 @@ testthat::test_that("save_faust_pop works correctly", {
 
   # preliminary check that first pop is of size 4 and second of size 0
   # run code for same sample but for level 1 of CD8-IgD
-  save_faust_pop(
+  faust_fcs_write(
     project_path = dir_proj,
     pop = c("CD3" = 2, "CD8-IgD" = 1),
     sample = 1,
@@ -262,17 +324,25 @@ testthat::test_that("save_faust_pop works correctly", {
   # check that folders are created correctly
   dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
   expect_true(dir.exists(file.path(dir_fcs, "CD3~2~CD8-IgD~1~")))
-  expect_identical(list.files(file.path(dir_fcs, "CD3~2~CD8-IgD~1~")), "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs")
+  expect_identical(
+    list.files(file.path(dir_fcs, "CD3~2~CD8-IgD~1~")),
+    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+  )
 
   # check that object was saved correctly
-  fr <- flowCore::read.FCS(file.path(dir_fcs, "CD3~2~CD8-IgD~1~", "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"))
+  fr <- flowCore::read.FCS(
+    file.path(
+      dir_fcs, "CD3~2~CD8-IgD~1~",
+      "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    )
+  )
   ex_1 <- flowCore::exprs(fr)
   expect_identical(nrow(ex_1), 4L)
 
   unlink(dir_fcs, recursive = TRUE)
 
   # run code for same sample but for level 1 of CD8-IgD
-  save_faust_pop(
+  faust_fcs_write(
     project_path = dir_proj,
     pop = c("CD3" = 1, "CD8-IgD" = 2),
     sample = 1,
@@ -282,10 +352,18 @@ testthat::test_that("save_faust_pop works correctly", {
   # check that folders are created correctly
   dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
   expect_true(dir.exists(file.path(dir_fcs, "CD3~1~CD8-IgD~2~")))
-  expect_identical(list.files(file.path(dir_fcs, "CD3~1~CD8-IgD~2~")), "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs")
+  expect_identical(
+    list.files(file.path(dir_fcs, "CD3~1~CD8-IgD~2~")),
+    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+  )
 
   # check that object was saved correctly
-  fr <- flowCore::read.FCS(file.path(dir_fcs, "CD3~1~CD8-IgD~2~", "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"))
+  fr <- flowCore::read.FCS(
+    file.path(
+      dir_fcs, "CD3~1~CD8-IgD~2~",
+      "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    )
+  )
   ex_1 <- flowCore::exprs(fr)
   expect_identical(nrow(ex_1), 1L)
   expect_identical(ex_1[1, "Ba137Di"][[1]], NaN)
@@ -293,7 +371,7 @@ testthat::test_that("save_faust_pop works correctly", {
   unlink(dir_fcs, recursive = TRUE)
 
   # run code for same sample but for level 1 of CD8-IgD
-  save_faust_pop(
+  faust_fcs_write(
     project_path = dir_proj,
     pop = list(
       c("CD3" = 2, "CD8-IgD" = 1),
@@ -306,24 +384,42 @@ testthat::test_that("save_faust_pop works correctly", {
   # check that folders are created correctly
   dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
   expect_true(dir.exists(file.path(dir_fcs, "CD3~21~CD8-IgD~12~")))
-  expect_identical(list.files(file.path(dir_fcs, "CD3~21~CD8-IgD~12~")), "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs")
+  expect_identical(
+    list.files(file.path(dir_fcs, "CD3~21~CD8-IgD~12~")),
+    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+  )
 
   # check that object was saved correctly
-  fr <- flowCore::read.FCS(file.path(dir_fcs, "CD3~21~CD8-IgD~12~", "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"))
+  fr <- flowCore::read.FCS(
+    file.path(
+      dir_fcs, "CD3~21~CD8-IgD~12~",
+      "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    )
+  )
   ex_1 <- flowCore::exprs(fr)
   expect_identical(nrow(ex_1), 4L)
 
   unlink(dir_fcs, recursive = TRUE)
 })
 
-test_that(".is_faust_ann_a_match_for_marker works when first entry is 0_0_0_0_0", {
-  faust_ann <- data.frame(x = c("0_0_0_0_0", "CD3~1~", "CD3~2~"))
-  match_vec <- .is_faust_ann_a_match_for_marker(faust_ann = faust_ann, marker = "CD3", level = "1")
-  expect_identical(match_vec, c(FALSE, TRUE, FALSE))
-})
+test_that(
+  ".is_faust_ann_a_match_for_marker works when first entry is 0_0_0_0_0",
+  {
+    faust_ann <- data.frame(x = c("0_0_0_0_0", "CD3~1~", "CD3~2~"))
+    match_vec <- .is_faust_ann_a_match_for_marker(
+      faust_ann = faust_ann, marker = "CD3", level = "1"
+    )
+    expect_identical(match_vec, c(FALSE, TRUE, FALSE))
+  }
+)
 
-test_that(".is_faust_ann_a_match_for_marker works when all entries are 0_0_0_0_0", {
-  faust_ann <- data.frame(x = c("0_0_0_0_0", "0_0_0_0_0", "0_0_0_0_0"))
-  match_vec <- .is_faust_ann_a_match_for_marker(faust_ann = faust_ann, marker = "CD3", level = "1")
-  expect_identical(match_vec, rep(FALSE, 3))
-})
+test_that(
+  ".is_faust_ann_a_match_for_marker works when all entries are 0_0_0_0_0",
+  {
+    faust_ann <- data.frame(x = c("0_0_0_0_0", "0_0_0_0_0", "0_0_0_0_0"))
+    match_vec <- .is_faust_ann_a_match_for_marker(
+      faust_ann = faust_ann, marker = "CD3", level = "1"
+    )
+    expect_identical(match_vec, rep(FALSE, 3))
+  }
+)

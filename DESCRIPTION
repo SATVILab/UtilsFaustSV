@@ -1,7 +1,7 @@
 Package: UtilsFaustSV
 Type: Package
 Title: Additional functions to extract and plot FAUST output
-Version: 0.1.0-1
+Version: 1.1.0
 Author: Miguel Rodo
 Maintainer: Miguel Rodo <rdxmig002@myuct.ac.za>
 Description: Provides functions to extract populations identified 
@@ -21,4 +21,5 @@ Imports:
     here
 Suggests: 
     testthat
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.3
+Roxygen: list(markdown = TRUE)

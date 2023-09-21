@@ -1,0 +1,20 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+    "ghcr.io/rocker-org/devcontainer-features/quarto-cli:1": {
+      "installTinyTex": true,
+      "version": "latest"
+    },
+    "ghcr.io/rocker-org/devcontainer-features/r-rig:1": {
+      "installDevTools": true,
+      "installREnv": true,
+      "installRMarkdown": true,
+      "installRadian": true,
+      "version": "4",
+      "pakVersion": "auto",
+      "vscodeRSupport": "full",
+      "pandocVersion": "auto"
+    }
+  },
+  "postCreateCommand": "./scripts/all/config_r.sh"
+}
