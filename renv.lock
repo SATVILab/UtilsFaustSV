@@ -1661,14 +1661,11 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "1.0.2.9000",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteUsername": "rstudio",
-      "RemoteRepo": "renv",
-      "RemoteRef": "main",
-      "RemoteSha": "816ed3eca4327094859ef8965ed0cca1b8632248"
+      "Version": "1.0.3",
+      "OS_type": null,
+      "NeedsCompilation": "no",
+      "Repository": "RSPM",
+      "Source": "Repository"
     },
     "rex": {
       "Package": "rex",
