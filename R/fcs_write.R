@@ -20,10 +20,13 @@
 #' If a character vector,
 #' then must specify a directory containing FCS files. These FCS
 #' files are used to create the output fcs files.
-#' @param pop \code{list}, \code{named character vector} or unnamed character vector of length one.
+#' @param pop \code{list}, \code{named character vector}
+#' or unnamed character vector of length one.
 #' If an unnamed character vector,
 #' then all cells matching that full FAUST annotation will be returned
-#' (e.g. "CD3+CD8+CD45RA+IFNg+IL2-TNF+").
+#' (e.g. "CD3+CD8+CD45RA+IFNg+IL2-TNF+" or, equivalently (depending
+#' on the number of sub-populations FAUST detects)
+#' "CD3~2~2~CD8~2~2~CD45RA~2~2~IFNg~2~2~IL2~1~2~TNF~2~2~")).
 #' If a named \code{character vector},
 #' then all cells matching the set of marker levels are returned.
 #' (names are markers, and elements are levels, e.g. c("CD3" = 2, "CD8" = 2)).
@@ -119,27 +122,47 @@ faust_fcs_write <- function(project_path,
       unlist()
   }
 
-
-
-
   # create directory to save to and pop list to compare to
   # --------------------------------------
+
+  marker_to_n_lvl <- faust_marker_get_usage(project_path = project_path)
 
   # get concatenated name of population
   if (!is.list(pop)) {
     if (is.null(names(pop))) {
       pop_name <- pop
+      pop <- .faust_pop_format_level_to_tilde(
+        pop = pop, project_path = project_path
+      )
     } else {
       pop_name <- ""
+      pop_name_vec <- names(pop)
       for (i in seq_along(pop)) {
-        pop_name <- paste0(
-          pop_name,
-          names(pop)[i],
-          "~",
-          pop[[i]],
-          "~"
-        )
+        if (is.numeric(pop[[i]])) {
+          pop_name <- paste0(
+            pop_name,
+            names(pop)[i],
+            "~",
+            pop[[i]],
+            "~",
+            marker_to_n_lvl[[names(pop)[i]]],
+            "~"
+          )
+        } else {
+          pop_name <- paste0(
+            pop_name,
+            names(pop)[i],
+            pop[[i]]
+          )
+          pop[[i]] <- .faust_marker_format_level_to_tilde(
+            marker = names(pop)[i],
+            lvl = pop[[i]],
+            n_lvl = marker_to_n_lvl[[names(pop)[i]]]
+          ) |>
+            substr(start = 2, stop = 2)
+        }
       }
+      pop <- as.numeric(pop) |> stats::setNames(pop_name_vec)
     }
   } else if (
     is.list(pop) &&
@@ -167,6 +190,8 @@ faust_fcs_write <- function(project_path,
         paste0(unique(pop_level_list[[i]]),
           collapse = ""
         ),
+        "~",
+        marker_to_n_lvl[[names(pop_level_list)[i]]],
         "~"
       )
     }) %>%

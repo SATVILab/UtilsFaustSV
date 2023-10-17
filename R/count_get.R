@@ -171,6 +171,7 @@ faust_count_get_pop <- function(project_path = NULL,
 faust_count_get <- function(project_path, exhaustive = FALSE) {
   path_mat <- file.path(
     project_path,
+    "faustData",
     switch(as.character(exhaustive),
       "TRUE" = "exhaustiveFaustCountMatrix.rds",
       "FALSE" = "faustCountMatrix.rds",
