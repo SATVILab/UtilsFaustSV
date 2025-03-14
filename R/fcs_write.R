@@ -168,6 +168,38 @@ faust_fcs_write <- function(project_path,
     is.list(pop) &&
       all(purrr::map_lgl(pop, function(x) is.character(x) || is.numeric(x)))
   ) {
+
+    pop <- purrr::map(pop, function(pop_curr) {
+      pop_name <- ""
+      pop_name_vec <- names(pop_curr)
+      for (i in seq_along(pop_curr)) {
+        if (is.numeric(pop_curr[[i]])) {
+          pop_name <- paste0(
+            pop_name,
+            names(pop_curr)[i],
+            "~",
+            pop_curr[[i]],
+            "~",
+            marker_to_n_lvl[[names(pop_curr)[i]]],
+            "~"
+          )
+        } else {
+          pop_name <- paste0(
+            pop_name,
+            names(pop_curr)[i],
+            pop_curr[[i]]
+          )
+          pop_curr[[i]] <- .faust_marker_format_level_to_tilde(
+            marker = names(pop_curr)[i],
+            lvl = pop_curr[[i]],
+            n_lvl = marker_to_n_lvl[[names(pop_curr)[i]]]
+          ) |>
+            substr(start = 2, stop = 2)
+        }
+      }
+      pop_curr <- as.numeric(pop_curr) |> stats::setNames(pop_name_vec)
+    })
+
     pop_name_vec <- purrr::map(pop, function(pop_curr) names(pop_curr)) %>%
       unlist() %>%
       unique()
@@ -196,6 +228,8 @@ faust_fcs_write <- function(project_path,
       )
     }) %>%
       paste0(collapse = "")
+    
+
   }
 
 
