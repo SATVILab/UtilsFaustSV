@@ -52,7 +52,8 @@ faust_count_get_pop <- function(project_path = NULL,
                                   "sampleName",
                                   "experimentalUnit"
                                 ),
-                                exhaustive = FALSE) {
+                                exhaustive = FALSE, 
+                                simplify_names = TRUE) {
   # read in data
   if (is.null(data)) {
     if (is.null(project_path)) {
@@ -123,19 +124,22 @@ faust_count_get_pop <- function(project_path = NULL,
     pop_col_name_vec <- colnames(data[, pop_col_ind_vec])
     # for each column identified, remove each annotation specifying
     # the main subset of which it's a part
-    for (i in seq_along(pop_col_name_vec)) {
-      for (j in seq_along(pop)) {
-        pop_col_name_vec[i] <- stringr::str_remove(
-          pop_col_name_vec[i],
-          paste0(
-            names(pop)[[j]],
-            "[[",
-            pop[j],
-            "]]"
+    if(simplify_names){
+      for (i in seq_along(pop_col_name_vec)) {
+        for (j in seq_along(pop)) {
+          pop_col_name_vec[i] <- stringr::str_remove(
+            pop_col_name_vec[i],
+            paste0(
+              names(pop)[[j]],
+              "[[",
+              pop[j],
+              "]]"
+            )
           )
-        )
+        }
       }
     }
+    
     # select only columns found to match annotation set
     data_resp <- data[, pop_col_ind_vec, drop = FALSE]
     # rename columns as per above
