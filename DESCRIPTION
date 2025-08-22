@@ -18,7 +18,8 @@ Imports:
     tidyr,
     cowplot,
     purrr,
-    here
+    here,
+    scales
 Suggests: 
     testthat
 RoxygenNote: 7.2.3
