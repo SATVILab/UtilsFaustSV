@@ -2,9 +2,10 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [main, master]
+    branches: [main]
   pull_request:
-    branches: [main, master]
+    branches: [main]
+  workflow_dispatch:
 
 name: R-CMD-check
 
@@ -36,7 +37,7 @@ jobs:
       - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
-          http-user-agent: ${{ matrix.config.http-user-agent }}
+          http-user-agent: ${{ matrix.config['http-user-agent'] || 'default' }}
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
