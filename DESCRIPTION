@@ -10,6 +10,7 @@ Description: Provides functions to extract populations identified
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Depends: R (>= 4.1.0)
 Imports:
     stringr,
     ggplot2,
@@ -19,8 +20,11 @@ Imports:
     cowplot,
     purrr,
     here,
-    scales
+    scales,
+    flowCore,
+    flowWorkspace
 Suggests: 
-    testthat
+    testthat,
+    usethis
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
