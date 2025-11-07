@@ -38,11 +38,13 @@ When writing or modifying testthat tests, please follow these guidelines:
    - Avoid hardcoded absolute paths
 
 5. **Test data**
-   - Use test data from existing directories:
+   - Use test data from existing directories in `tests/testthat/`:
      - `faustData/`: FAUST output test data
      - `fcsTest/`: FCS file test data
      - `gs_test/`: GatingSet test data
+   - These directories exist and contain the necessary test fixtures
    - Keep test data minimal and focused
+   - Do not commit large test files without review
 
 6. **Code style in tests**
    - Remove all unnecessary trailing whitespace

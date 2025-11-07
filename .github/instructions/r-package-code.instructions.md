@@ -21,12 +21,12 @@ When writing or modifying R package source code, please follow these guidelines:
 
 3. **Package dependencies**
    - Explicitly refer to all packages used with `package::function()` notation
-   - Exception: `ggplot2` functions and `flowCore::exprs` can be used without prefix
+   - Exception: Core `ggplot2` functions (like `ggplot()`, `aes()`, `geom_*()`, etc.) and `flowCore::exprs` can be used without prefix
    - Do NOT use `@import` or `@importFrom` (except for ggplot2 and flowCore::exprs)
 
 4. **Debugging support**
    - Use `.debug` as the parameter name for debugging flags in internal functions
-   - Use `.debug_msg()` for debug messages: `.debug_msg(boolean, message, optional_value)`
+   - Use `.debug_msg(.debug, message, value = NULL)` for debug messages (if this utility function is available)
 
 5. **Code quality**
    - Remove all unnecessary trailing whitespace, including on blank lines
