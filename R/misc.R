@@ -8,9 +8,7 @@
 #' @param search logical. If \code{TRUE}, then square brackets are concatenated
 #' around each of the elements in the level strings.
 #'
-#' @examples
-#' .collapse_pop(c("CD4" = "-", "CD3" = "-"), search = FALSE)
-#' .collapse_pop(c("CD4" = "-", "CD3" = "-"), search = TRUE)
+#' @keywords internal
 .collapse_pop <- function(pop, search = FALSE) {
   purrr::map_chr(seq_along(pop), function(i) {
     if (!search) {
