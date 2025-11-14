@@ -1,0 +1,12 @@
+.collapse_pop	dot-collapse_pop
+.faust_fcs_write	dot-faust_fcs_write
+.get_faust_pop	dot-get_faust_pop
+.get_pop_match_ind	dot-get_pop_match_ind
+.is_faust_ann_a_match_for_marker	dot-is_faust_ann_a_match_for_marker
+.is_faust_ann_a_match_pop	dot-is_faust_ann_a_match_pop
+faust_count_get	faust_count_get
+faust_count_get_pop	faust_count_get
+faust_count_plot	faust_count_plot
+faust_fcs_write	faust_fcs_write
+faust_marker_get_usage	faust_marker_get_usage
+trans_asinh	trans_asinh

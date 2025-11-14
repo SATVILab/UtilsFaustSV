@@ -1,0 +1,14 @@
+- One or more packages recorded in the lockfile are not installed.
+- Use `renv::status()` for more details.
+* installing *source* package ‘UtilsFaustSV’ ...
+** this is package ‘UtilsFaustSV’ version ‘1.2.2’
+** using staged installation
+** R
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (UtilsFaustSV)

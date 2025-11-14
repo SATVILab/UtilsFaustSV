@@ -1,0 +1,148 @@
+* using log directory ‘/home/runner/work/UtilsFaustSV/UtilsFaustSV/UtilsFaustSV.Rcheck’
+* using R version 4.5.2 (2025-10-31)
+* using platform: x86_64-pc-linux-gnu
+* R was compiled by
+    gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0
+    GNU Fortran (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0
+* running under: Ubuntu 24.04.3 LTS
+* using session charset: UTF-8
+* using option ‘--no-manual’
+* checking for file ‘UtilsFaustSV/DESCRIPTION’ ... OK
+* checking extension type ... Package
+* this is package ‘UtilsFaustSV’ version ‘1.2.2’
+* package encoding: UTF-8
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... NOTE
+Found the following hidden files and directories:
+  .devcontainer
+These were most likely included in error. See section ‘Package
+structure’ in the ‘Writing R Extensions’ manual.
+* checking for portable file names ... WARNING
+Found the following files with non-portable file names:
+  tests/testthat/fcsTest/01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs
+  tests/testthat/fcsTest/01-0993 D0 AND 07-1147 DAY0-pid1_mtbaux-debeaded_2.fcs
+  tests/testthat/gs_test/01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs.h5
+  tests/testthat/gs_test/01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs.pb
+  tests/testthat/gs_test/01-0993 D0 AND 07-1147 DAY0-pid1_mtbaux-debeaded_2.fcs.h5
+  tests/testthat/gs_test/01-0993 D0 AND 07-1147 DAY0-pid1_mtbaux-debeaded_2.fcs.pb
+  tests/testthat/faustData/sampleData/01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs
+  tests/testthat/faustData/sampleData/01-0993 D0 AND 07-1147 DAY0-pid1_mtbaux-debeaded_2.fcs
+These are not fully portable file names.
+See section ‘Package structure’ in the ‘Writing R Extensions’ manual.
+Found the following non-portable file paths:
+  UtilsFaustSV/tests/testthat/faustData/sampleData/01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs/faustAnnotation.csv
+  UtilsFaustSV/tests/testthat/faustData/sampleData/01-0993 D0 AND 07-1147 DAY0-pid1_mtbaux-debeaded_2.fcs/faustAnnotation.csv
+  UtilsFaustSV/tests/testthat/faustData/sampleData/01-0993 D0 AND 07-1147 DAY0-pid1_mtbaux-debeaded_2.fcs
+
+Tarballs are only required to store paths of up to 100 bytes and cannot
+store those of more than 256 bytes, with restrictions including to 100
+bytes for the final component.
+See section ‘Package structure’ in the ‘Writing R Extensions’ manual.
+* checking for sufficient/correct file permissions ... OK
+* checking whether package ‘UtilsFaustSV’ can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking DESCRIPTION meta-information ... OK
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking code files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking loading without being on the library search path ... OK
+* checking dependencies in R code ... WARNING
+'::' or ':::' import not declared from: ‘tibble’
+Namespace in Imports field not imported from: ‘here’
+  All declared Imports should be used.
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... NOTE
+.faust_marker_format_level_to_common: no visible binding for global
+  variable ‘marker’
+faust_count_get_pop: no visible binding for global variable
+  ‘sampleName’
+faust_count_get_pop: no visible global function definition for
+  ‘everything’
+faust_count_get_pop: no visible binding for global variable ‘impH’
+faust_count_get_pop: no visible binding for global variable
+  ‘experimentalUnit’
+faust_count_get_pop: no visible binding for global variable ‘exp_unit’
+faust_count_get_pop: no visible binding for global variable ‘count’
+faust_count_get_pop: no visible binding for global variable ‘tot_count’
+faust_count_plot: no visible binding for global variable ‘tot_count’
+faust_count_plot: no visible binding for global variable ‘count’
+faust_count_plot: no visible binding for global variable ‘prop’
+faust_count_plot: no visible binding for global variable ‘perc’
+Undefined global functions or variables:
+  count everything exp_unit experimentalUnit impH marker perc prop
+  sampleName tot_count
+* checking Rd files ... OK
+* checking Rd metadata ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... WARNING
+Codoc mismatches from Rd file 'faust_count_get.Rd':
+faust_count_get_pop
+  Code: function(project_path = NULL, data = NULL, pop = NULL, dem_col
+                 = c("sample", "exp_unit", "tot_count",
+                 "tot_count_classified", "sampleName",
+                 "experimentalUnit"), exhaustive = FALSE,
+                 simplify_names = TRUE)
+  Docs: function(project_path = NULL, data = NULL, pop = NULL, dem_col
+                 = c("sample", "exp_unit", "tot_count",
+                 "tot_count_classified", "sampleName",
+                 "experimentalUnit"), exhaustive = FALSE)
+  Argument names in code not in docs:
+    simplify_names
+
+* checking Rd \usage sections ... WARNING
+Undocumented arguments in Rd file 'dot-get_faust_pop.Rd'
+  ‘faust_ann’
+Documented arguments not in \usage in Rd file 'dot-get_faust_pop.Rd':
+  ‘sample’
+
+Undocumented arguments in Rd file 'dot-is_faust_ann_a_match_for_marker.Rd'
+  ‘faust_ann’
+
+Undocumented arguments in Rd file 'dot-is_faust_ann_a_match_pop.Rd'
+  ‘faust_ann’
+
+Undocumented arguments in Rd file 'faust_count_plot.Rd'
+  ‘font_size’ ‘point_size_max’
+
+Functions with \usage entries need to have the appropriate \alias
+entries, and all their arguments documented.
+The \usage entries must correspond to syntactically valid R code.
+See chapter ‘Writing R documentation files’ in the ‘Writing R
+Extensions’ manual.
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking examples ... ERROR
+Running examples in ‘UtilsFaustSV-Ex.R’ failed
+The error most likely occurred in:
+
+> ### Name: .collapse_pop
+> ### Title: Get a searchable version of the marker levels
+> ### Aliases: .collapse_pop
+> 
+> ### ** Examples
+> 
+> .collapse_pop(c("CD4" = "-", "CD3" = "-"), search = FALSE)
+Error in .collapse_pop(c(CD4 = "-", CD3 = "-"), search = FALSE) : 
+  could not find function ".collapse_pop"
+Execution halted
+* checking for unstated dependencies in ‘tests’ ... OK
+* checking tests ... OK
+  Running ‘testthat.R’
+* DONE
+Status: 1 ERROR, 4 WARNINGs, 2 NOTEs

@@ -1,0 +1,21 @@
+.collapse_pop           Get a searchable version of the marker levels
+.faust_fcs_write        Save FAUST subset as an FCS file
+.get_faust_pop          Filter an expression matrix to return only
+                        cells matching one or more FAUST annotation
+                        combinations
+.get_pop_match_ind      Get indices of columns that have a specified
+                        annotation
+.is_faust_ann_a_match_for_marker
+                        Check if FAUST annotation has as given level
+                        for a given marker
+.is_faust_ann_a_match_pop
+                        Check if FAUST annotation has a given level for
+                        a set of markers
+faust_count_get_pop     Get counts of subsets identified by FAUST
+faust_count_plot        Plot counts of FAUST pops by sample
+faust_fcs_write         Save FAUST subset as an FCS file
+faust_marker_get_usage
+                        Get the number of levels used for each marker
+                        FAUST used to cluster
+trans_asinh             Create inverse hyperbolic sin transformation
+                        object
