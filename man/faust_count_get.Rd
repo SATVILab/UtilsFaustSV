@@ -11,7 +11,8 @@ faust_count_get_pop(
   pop = NULL,
   dem_col = c("sample", "exp_unit", "tot_count", "tot_count_classified", "sampleName",
     "experimentalUnit"),
-  exhaustive = FALSE
+  exhaustive = FALSE,
+  simplify_names = TRUE
 )
 
 faust_count_get(project_path, exhaustive = FALSE)
@@ -47,6 +48,10 @@ then counts are taken from the exhaustive FAUST count matrix
 rather than the count matrix after excluding subsets that
 don't appear in sufficiently many
 experimental units. Default is \code{FALSE}.}
+
+\item{simplify_names}{logical. If \code{TRUE},
+then population names are simplified by removing the markers
+specified in \code{pop} from the column names. Default is \code{TRUE}.}
 }
 \value{
 A dataframe with columns as specified in
@@ -58,10 +63,12 @@ sample), \code{pop} (population name) and
 Get counts of subsets identified by FAUST
 }
 \examples{
+\dontrun{
 # get counts for cells matching one annotation
 pop <- c("CD4" = "-", "CD8" = "+")
-get_pop_counts(pop = pop)
+faust_count_get_pop(project_path = "/path/to/project", pop = pop)
 # get counts for cells matching either of the two annotations
 pop <- list(c("CD4" = "-", "CD8" = "+"), c("CD8" = "-", "CD4" = "+"))
-get_pop_counts(pop = pop)
+faust_count_get_pop(project_path = "/path/to/project", pop = pop)
+}
 }

@@ -30,6 +30,10 @@ where the frequency is
 the sum of all cells that match the population specified.
 If \code{NULL}, then all subsets found are plotted.}
 
+\item{font_size}{numeric. Font size for plot labels. Default is 10.}
+
+\item{point_size_max}{numeric. Maximum point size for plots. Default is 2.}
+
 \item{breaks}{numeric vector. If supplied, then this is the breaks
 for the x-axis. If not supplied, then the default breaks are used of
 `c(0, 0.001, 0.005, 0.01, 0.02, 0.5, 0.1, 0.5, 1, 2, 5, 10, 20, 50, 100)``.}
@@ -76,14 +80,15 @@ it is treated as a population for which counts are required for
 individual subsets.
 }
 \examples{
-project_path <- usethis::proj_path(ext = "/inst/extdata")
+\dontrun{
+project_path <- "/path/to/faust/project"
 # plot all subsets of pop, as it is a character vector
 pop <- c(
   "CD3" = "+", "CD4" = "+", "CD8-IgD" = "-",
   "CD20" = "-", "CD33" = "-", "CD14" = "-",
   "TCRgd-CD19" = "-"
 )
-plot_faust_count(
+faust_count_plot(
   project_path = project_path,
   pop = pop
 )
@@ -101,8 +106,9 @@ pop <- list(
     "TCRgd-CD19" = "-"
   )
 )
-plot_faust_count(
+faust_count_plot(
   project_path = project_path,
   pop = pop
 )
+}
 }

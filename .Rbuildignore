@@ -7,7 +7,7 @@
 ^README\.Rmd$
 ^scripts
 $renv
-$\.devcontainer
+^\.devcontainer$
 $_dependencies\.R$
 ^SCRATCH\.R$
 ^\.github$

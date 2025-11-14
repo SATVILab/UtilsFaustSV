@@ -4,9 +4,9 @@ Title: Additional functions to extract and plot FAUST output
 Version: 1.2.2
 Author: Miguel Rodo
 Maintainer: Miguel Rodo <rdxmig002@myuct.ac.za>
-Description: Provides functions to extract populations identified 
+Description: Provides functions to extract populations identified
     by FAUST using only a subset of the markers used by FAUST, e.g.
-	extract CD3+CD4+CD8- cells when FAUST also used HLADR and CCR7. 
+	extract CD3+CD4+CD8- cells when FAUST also used HLADR and CCR7.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -19,12 +19,12 @@ Imports:
     tidyr,
     cowplot,
     purrr,
-    here,
     scales,
     flowCore,
-    flowWorkspace
-Suggests: 
+    flowWorkspace,
+    tibble
+Suggests:
     testthat,
     usethis
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)

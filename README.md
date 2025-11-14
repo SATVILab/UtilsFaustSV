@@ -4,6 +4,10 @@
 # UtilsFaustSV
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/SATVILab/UtilsFaustSV/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SATVILab/UtilsFaustSV/actions/workflows/R-CMD-check.yaml)
+[![test-coverage](https://github.com/SATVILab/UtilsFaustSV/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/SATVILab/UtilsFaustSV/actions/workflows/test-coverage.yaml)
+[![codecov](https://codecov.io/gh/SATVILab/UtilsFaustSV/branch/main/graph/badge.svg)](https://codecov.io/gh/SATVILab/UtilsFaustSV)
 <!-- badges: end -->
 
 The goal of UtilsFaustSV is to provide convenient functions to

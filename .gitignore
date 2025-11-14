@@ -5,3 +5,5 @@ inst/extdata/faustData/**
 tests/testthat/Rplots.pdf
 tests/testthat/fcsSource/01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs
 tests/testthat/fcsSource/01-0993 D0 AND 07-1147 DAY0-pid1_mtbaux-debeaded_2.fcs
+*.tar.gz
+*.Rcheck/

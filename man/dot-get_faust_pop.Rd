@@ -26,8 +26,8 @@ element must be a named \code{character vector}, and then
 all cells matching either of
 these specified sets of marker levels are returned.}
 
-\item{sample}{\code{character}. Name of sample, as found in directory
-<project_path>/faustData/sampleData/.}
+\item{faust_ann}{\code{data.frame}. FAUST annotation table read from
+<project_path>/faustData/sampleData/<sample>/faustAnnotation.csv.}
 }
 \value{
 Numeric matrix.
@@ -40,3 +40,4 @@ return only cells matching one or more FAUST annotation combinations
 This is effectively an inclusive OR statement across the different population
 annotations.
 }
+\keyword{internal}

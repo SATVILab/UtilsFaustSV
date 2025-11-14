@@ -369,8 +369,8 @@ faust_fcs_write <- function(project_path,
 #' @title Filter an expression matrix to
 #' return only cells matching one or more FAUST annotation combinations
 #'
-#' @param sample \code{character}. Name of sample, as found in directory
-#' <project_path>/faustData/sampleData/.
+#' @param faust_ann \code{data.frame}. FAUST annotation table read from
+#' <project_path>/faustData/sampleData/<sample>/faustAnnotation.csv.
 #' @param ex \code{matrix}.
 #' Matrix containing marker expression values for \code{sample}.
 #' @inheritParams faust_fcs_write
@@ -380,6 +380,7 @@ faust_fcs_write <- function(project_path,
 #' annotations.
 #'
 #' @return Numeric matrix.
+#' @keywords internal
 .get_faust_pop <- function(ex, pop, faust_ann) {
   # vector to indicate if a match or not
   match <- rep(FALSE, nrow(ex))
@@ -419,6 +420,7 @@ faust_fcs_write <- function(project_path,
 #' all markers specified in the
 #' single FAUST population annotation.
 #'
+#' @keywords internal
 #' @importFrom stringr str_locate str_sub
 .is_faust_ann_a_match_pop <- function(faust_ann, pop) {
   # vector to save if a match or not.
@@ -443,6 +445,7 @@ faust_fcs_write <- function(project_path,
 #' @inheritParams .get_faust_pop
 #' @param marker character. Name of marker.
 #' @param level character. Level of marker, e.g. "1", "2" or "3".
+#' @keywords internal
 .is_faust_ann_a_match_for_marker <- function(faust_ann,
                                              marker,
                                              level) {

@@ -23,7 +23,4 @@ around each of the elements in the level strings.}
 \description{
 Get a searchable version of the marker levels
 }
-\examples{
-.collapse_pop(c("CD4" = "-", "CD3" = "-"), search = FALSE)
-.collapse_pop(c("CD4" = "-", "CD3" = "-"), search = TRUE)
-}
+\keyword{internal}
