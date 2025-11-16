@@ -7,6 +7,9 @@
 .is_faust_ann_a_match_pop(faust_ann, pop)
 }
 \arguments{
+\item{faust_ann}{\code{data.frame}. FAUST annotation table read from
+<project_path>/faustData/sampleData/<sample>/faustAnnotation.csv.}
+
 \item{pop}{\code{named character vector}.
 Names are marker names and values are
 levels of marker.
@@ -23,3 +26,4 @@ This is effectively an AND statement across
 all markers specified in the
 single FAUST population annotation.
 }
+\keyword{internal}

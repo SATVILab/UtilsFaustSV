@@ -27,6 +27,9 @@
 #' rather than the count matrix after excluding subsets that
 #' don't appear in sufficiently many
 #' experimental units. Default is \code{FALSE}.
+#' @param simplify_names logical. If \code{TRUE},
+#' then population names are simplified by removing the markers
+#' specified in \code{pop} from the column names. Default is \code{TRUE}.
 #'
 #' @return A dataframe with columns as specified in
 #' \code{dem_col}, \code{tot_count} (total number of cells classified for a
@@ -34,12 +37,14 @@
 #' \code{count} (number of cells in population).
 #'
 #' @examples
+#' \dontrun{
 #' # get counts for cells matching one annotation
 #' pop <- c("CD4" = "-", "CD8" = "+")
-#' get_pop_counts(pop = pop)
+#' faust_count_get_pop(project_path = "/path/to/project", pop = pop)
 #' # get counts for cells matching either of the two annotations
 #' pop <- list(c("CD4" = "-", "CD8" = "+"), c("CD8" = "-", "CD4" = "+"))
-#' get_pop_counts(pop = pop)
+#' faust_count_get_pop(project_path = "/path/to/project", pop = pop)
+#' }
 #' @export
 faust_count_get_pop <- function(project_path = NULL,
                                 data = NULL,

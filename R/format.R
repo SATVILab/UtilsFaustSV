@@ -246,7 +246,7 @@ tilde_to_common <- c(
   if (!grepl("^~\\d~\\d~$", lvl)) {
     if (!lvl %in% format_vec_valid_common) {
       stop(paste0(
-        "The level '", lvl, "' for marker '", marker, "' is not valid."
+        "The level '", lvl, "' is not valid."
       ))
     }
     return(lvl)

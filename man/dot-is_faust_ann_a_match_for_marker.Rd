@@ -7,6 +7,9 @@
 .is_faust_ann_a_match_for_marker(faust_ann, marker, level)
 }
 \arguments{
+\item{faust_ann}{\code{data.frame}. FAUST annotation table read from
+<project_path>/faustData/sampleData/<sample>/faustAnnotation.csv.}
+
 \item{marker}{character. Name of marker.}
 
 \item{level}{character. Level of marker, e.g. "1", "2" or "3".}
@@ -14,3 +17,4 @@
 \description{
 Check if FAUST annotation has as given level for a given marker
 }
+\keyword{internal}
