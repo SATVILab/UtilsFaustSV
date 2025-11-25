@@ -27,7 +27,7 @@ all cells matching either of
 these specified sets of marker levels are returned.}
 
 \item{faust_ann}{\code{data.frame}. FAUST annotation table read from
-<project_path>/faustData/sampleData/<sample>/faustAnnotation.csv.}
+<project_path>/faustData/sampleData/\if{html}{\out{<sample>}}/faustAnnotation.csv.}
 }
 \value{
 Numeric matrix.
