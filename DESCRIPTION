@@ -27,6 +27,11 @@ Suggests:
     testthat,
     usethis,
     here,
-    readr
+    readr,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
 RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
+URL: https://satvilab.github.io/UtilsFaustSV/, https://github.com/SATVILab/UtilsFaustSV
+BugReports: https://github.com/SATVILab/UtilsFaustSV/issues

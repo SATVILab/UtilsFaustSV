@@ -11,3 +11,7 @@ $renv
 $_dependencies\.R$
 ^SCRATCH\.R$
 ^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^README\.html$
