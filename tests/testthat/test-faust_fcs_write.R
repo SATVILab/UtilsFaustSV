@@ -32,7 +32,7 @@
     "01-0993 D0 AND 07-1147 DAY0-pid1_mtbaux-debeaded_2.fcs"
   )
   if (!requireNamespace("here", quietly = TRUE)) {
-    utils::install.packages("here")
+    utils::install.packages("here", repos = "https://cran.rstudio.com/")
   }
 
   if (!dir.exists(here::here("tests/testthat/fcsSource"))) {
@@ -75,7 +75,7 @@
     )
     if (!dir.exists(dir_faust_ann)) dir.create(dir_faust_ann, recursive = TRUE)
     if (!requireNamespace("readr", quietly = TRUE)) {
-      install.packages("readr")
+      install.packages("readr", repos = "https://cran.rstudio.com/")
     }
     readr::write_csv(
       faust_ann_tbl,
@@ -97,9 +97,9 @@
 }
 
 if (!requireNamespace("here", quietly = TRUE)) {
-  utils::install.packages("here")
+  utils::install.packages("here", repos = "https://cran.rstudio.com/")
 }
-if (!dir.exists(here::here("tests/testthat/gs_test"))) {
+if (!dir.exists(testthat::test_path("gs_test"))) {
   .create_data_for_tests()
 }
 
@@ -113,8 +113,8 @@ testthat::test_that("faust_fcs_write works correctly", {
   # ==========================================
 
   # required objects
-  dir_proj <- usethis::proj_path("tests", "testthat")
-  gs <- flowWorkspace::load_gs(here::here("tests/testthat/gs_test"))
+  dir_proj <- testthat::test_path()
+  gs <- flowWorkspace::load_gs(testthat::test_path("gs_test"))
 
   # ==========================================
   # Sample1 - CD8-IgD~2~
