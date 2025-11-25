@@ -28,11 +28,11 @@
   dir_comp_acs <- "C:/Users/migue/Work/Projects/SATVI/CompACS"
   dir_fcs <- file.path(dir_comp_acs, "Output/OutputDataTidyACSCyTOFPreprocess/final/fcs") # nolint
   fn_vec <- c(
-    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs",
-    "01-0993 D0 AND 07-1147 DAY0-pid1_mtbaux-debeaded_2.fcs"
+    "sample1_ebv.fcs",
+    "sample2_mtbaux.fcs"
   )
   if (!requireNamespace("here", quietly = TRUE)) {
-    utils::install.packages("here")
+    utils::install.packages("here", repos = "https://cran.rstudio.com/")
   }
 
   if (!dir.exists(here::here("tests/testthat/fcsSource"))) {
@@ -75,7 +75,7 @@
     )
     if (!dir.exists(dir_faust_ann)) dir.create(dir_faust_ann, recursive = TRUE)
     if (!requireNamespace("readr", quietly = TRUE)) {
-      install.packages("readr")
+      install.packages("readr", repos = "https://cran.rstudio.com/")
     }
     readr::write_csv(
       faust_ann_tbl,
@@ -97,9 +97,9 @@
 }
 
 if (!requireNamespace("here", quietly = TRUE)) {
-  utils::install.packages("here")
+  utils::install.packages("here", repos = "https://cran.rstudio.com/")
 }
-if (!dir.exists(here::here("tests/testthat/gs_test"))) {
+if (!dir.exists(testthat::test_path("gs_test"))) {
   .create_data_for_tests()
 }
 
@@ -113,8 +113,8 @@ testthat::test_that("faust_fcs_write works correctly", {
   # ==========================================
 
   # required objects
-  dir_proj <- usethis::proj_path("tests", "testthat")
-  gs <- flowWorkspace::load_gs(here::here("tests/testthat/gs_test"))
+  dir_proj <- testthat::test_path()
+  gs <- flowWorkspace::load_gs(testthat::test_path("gs_test"))
 
   # ==========================================
   # Sample1 - CD8-IgD~2~
@@ -135,13 +135,13 @@ testthat::test_that("faust_fcs_write works correctly", {
   expect_true(dir.exists(file.path(dir_fcs, pop_nm_detailed)))
   expect_identical(
     list.files(file.path(dir_fcs, pop_nm_detailed)),
-    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    "sample1_ebv.fcs"
   )
   expr_mat <- flowCore::exprs(
     flowCore::read.FCS(
       file.path(
         dir_fcs, pop_nm_detailed,
-        "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+        "sample1_ebv.fcs"
       )
     )
   )
@@ -163,13 +163,13 @@ testthat::test_that("faust_fcs_write works correctly", {
   expect_true(dir.exists(file.path(dir_fcs, pop_nm_detailed)))
   expect_identical(
     list.files(file.path(dir_fcs, pop_nm_detailed)),
-    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    "sample1_ebv.fcs"
   )
   expr_mat <- flowCore::exprs(
     flowCore::read.FCS(
       file.path(
         dir_fcs, pop_nm_detailed,
-        "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+        "sample1_ebv.fcs"
       )
     )
   )
@@ -189,7 +189,7 @@ testthat::test_that("faust_fcs_write works correctly", {
   expect_true(dir.exists(file.path(dir_fcs, "CD8-IgD~2~2~")))
   expect_identical(
     list.files(file.path(dir_fcs, "CD8-IgD~2~2~")),
-    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    "sample1_ebv.fcs"
   )
 
   # check that object was saved correctly
@@ -197,7 +197,7 @@ testthat::test_that("faust_fcs_write works correctly", {
     file.path(
       dir_fcs,
       "CD8-IgD~2~2~",
-      "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+      "sample1_ebv.fcs"
     )
   )
   ex_2 <- flowCore::exprs(fr)
@@ -216,7 +216,7 @@ testthat::test_that("faust_fcs_write works correctly", {
   expect_true(dir.exists(file.path(dir_fcs, "CD8-IgD+")))
   expect_identical(
     list.files(file.path(dir_fcs, "CD8-IgD+")),
-    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    "sample1_ebv.fcs"
   )
 
   # check that object was saved correctly
@@ -224,7 +224,7 @@ testthat::test_that("faust_fcs_write works correctly", {
     file.path(
       dir_fcs,
       "CD8-IgD+",
-      "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+      "sample1_ebv.fcs"
     )
   )
   ex_2 <- flowCore::exprs(fr)
@@ -247,7 +247,7 @@ testthat::test_that("faust_fcs_write works correctly", {
   expect_true(dir.exists(file.path(dir_fcs, "CD8-IgD~1~2~")))
   expect_identical(
     list.files(file.path(dir_fcs, "CD8-IgD~1~2~")),
-    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    "sample1_ebv.fcs"
   )
 
   # check that object was saved correctly
@@ -255,7 +255,7 @@ testthat::test_that("faust_fcs_write works correctly", {
     file.path(
       dir_fcs,
       "CD8-IgD~1~2~",
-      "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+      "sample1_ebv.fcs"
     )
   )
   ex_1 <- flowCore::exprs(fr)
@@ -265,14 +265,14 @@ testthat::test_that("faust_fcs_write works correctly", {
   unlink(dir_fcs, recursive = TRUE)
 
   # ==========================================
-  # Sample "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs" - CD3 ~ 2
+  # Sample "sample1_ebv.fcs" - CD3 ~ 2
   # ==========================================
 
   # run code for same sample but for level 1 of CD8-IgD
   faust_fcs_write(
     project_path = dir_proj,
     pop = c("CD3" = 2),
-    sample = "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs",
+    sample = "sample1_ebv.fcs",
     fr_source = gs
   )
 
@@ -281,14 +281,14 @@ testthat::test_that("faust_fcs_write works correctly", {
   expect_true(dir.exists(file.path(dir_fcs, "CD3~2~2~")))
   expect_identical(
     list.files(file.path(dir_fcs, "CD3~2~2~")),
-    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    "sample1_ebv.fcs"
   )
 
   # check that object was saved correctly
   fr <- flowCore::read.FCS(
     file.path(
       dir_fcs, "CD3~2~2~",
-      "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+      "sample1_ebv.fcs"
     )
   )
   ex <- flowCore::exprs(fr)
@@ -312,15 +312,15 @@ testthat::test_that("faust_fcs_write works correctly", {
   dir_fcs <- file.path(dir_proj, "faustData", "fcsData")
   expect_true(dir.exists(file.path(dir_fcs, "CD4~1~2~")))
   expect_identical(list.files(file.path(dir_fcs, "CD4~1~2~")), c(
-    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs",
-    "01-0993 D0 AND 07-1147 DAY0-pid1_mtbaux-debeaded_2.fcs"
+    "sample1_ebv.fcs",
+    "sample2_mtbaux.fcs"
   ))
 
   # check that object was saved correctly
   fr <- flowCore::read.FCS(
     file.path(
       dir_fcs, "CD4~1~2~",
-      "01-0993 D0 AND 07-1147 DAY0-pid1_mtbaux-debeaded_2.fcs"
+      "sample2_mtbaux.fcs"
     )
   )
   ex <- flowCore::exprs(fr)
@@ -329,7 +329,7 @@ testthat::test_that("faust_fcs_write works correctly", {
   fr <- flowCore::read.FCS(
     file.path(
       dir_fcs, "CD4~1~2~",
-      "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+      "sample1_ebv.fcs"
     )
   )
   ex <- flowCore::exprs(fr)
@@ -357,14 +357,14 @@ testthat::test_that("faust_fcs_write works correctly", {
   expect_true(dir.exists(file.path(dir_fcs, "CD8-IgD~12~2~")))
   expect_identical(
     list.files(file.path(dir_fcs, "CD8-IgD~12~2~")),
-    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    "sample1_ebv.fcs"
   )
 
   # check that object was saved correctly
   fr <- flowCore::read.FCS(
     file.path(
       dir_fcs, "CD8-IgD~12~2~",
-      "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+      "sample1_ebv.fcs"
     )
   )
   ex_1 <- flowCore::exprs(fr)
@@ -390,14 +390,14 @@ testthat::test_that("faust_fcs_write works correctly", {
   expect_true(dir.exists(file.path(dir_fcs, "CD3~2~2~CD8-IgD~1~2~")))
   expect_identical(
     list.files(file.path(dir_fcs, "CD3~2~2~CD8-IgD~1~2~")),
-    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    "sample1_ebv.fcs"
   )
 
   # check that object was saved correctly
   fr <- flowCore::read.FCS(
     file.path(
       dir_fcs, "CD3~2~2~CD8-IgD~1~2~",
-      "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+      "sample1_ebv.fcs"
     )
   )
   ex_1 <- flowCore::exprs(fr)
@@ -418,14 +418,14 @@ testthat::test_that("faust_fcs_write works correctly", {
   expect_true(dir.exists(file.path(dir_fcs, "CD3~1~2~CD8-IgD~2~2~")))
   expect_identical(
     list.files(file.path(dir_fcs, "CD3~1~2~CD8-IgD~2~2~")),
-    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    "sample1_ebv.fcs"
   )
 
   # check that object was saved correctly
   fr <- flowCore::read.FCS(
     file.path(
       dir_fcs, "CD3~1~2~CD8-IgD~2~2~",
-      "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+      "sample1_ebv.fcs"
     )
   )
   ex_1 <- flowCore::exprs(fr)
@@ -450,14 +450,14 @@ testthat::test_that("faust_fcs_write works correctly", {
   expect_true(dir.exists(file.path(dir_fcs, "CD3~21~2~CD8-IgD~12~2~")))
   expect_identical(
     list.files(file.path(dir_fcs, "CD3~21~2~CD8-IgD~12~2~")),
-    "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+    "sample1_ebv.fcs"
   )
 
   # check that object was saved correctly
   fr <- flowCore::read.FCS(
     file.path(
       dir_fcs, "CD3~21~2~CD8-IgD~12~2~",
-      "01-0993 D0 AND 07-1147 DAY0-pid1_ebv-debeaded_2.fcs"
+      "sample1_ebv.fcs"
     )
   )
   ex_1 <- flowCore::exprs(fr)

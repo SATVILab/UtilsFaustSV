@@ -5,7 +5,7 @@
 \alias{trans_asinh}
 \title{Create inverse hyperbolic sin transformation object}
 \format{
-An object of class \code{trans} of length 7.
+An object of class \code{transform} of length 9.
 }
 \usage{
 trans_asinh

@@ -1,6 +1,6 @@
 test_that("faust_marker_get_usage works", {
   marker_nlevel_vec <- faust_marker_get_usage(
-    usethis::proj_path("./tests/testthat")
+    testthat::test_path()
   )
   marker_vec <- c(
     "CD33", "CD7", "CCR7", "CD8-IgD", "HLA-DR-beads", "CD14", "CD27",

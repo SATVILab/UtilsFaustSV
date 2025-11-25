@@ -50,10 +50,6 @@
 #' expression matrix. Default is \code{NULL}.
 #'
 #' @return \code{invisible(TRUE)}. Side effect is the saved FCS file.
-#' @examples faust_fcs_write(
-#'   project_path = "", pop = list("CD3" = 2),
-#'   gs = gs, sample = 1
-#' )
 #'
 #' @export
 faust_fcs_write <- function(project_path,
@@ -113,9 +109,9 @@ faust_fcs_write <- function(project_path,
     stop("Incorrect specification of sample parameter.")
   )
   # get vector of sample names in GatingSet
-  if (class(fr_source) == "GatingSet") {
+  if (inherits(fr_source, "GatingSet")) {
     sample_name_vec <- flowWorkspace::sampleNames(fr_source)
-  } else if (class(fr_source) == "character") {
+  } else if (is.character(fr_source)) {
     sample_name_vec <- lapply(fr_source, function(fr_source_curr) {
       list.files(fr_source_curr, pattern = "fcs$", full.names = FALSE)
     }) %>%
@@ -287,11 +283,11 @@ faust_fcs_write <- function(project_path,
   for (sample in sel_sample) {
     # get initial data
     # if(!is.null(gs)){
-    if (class(fr_source) == "GatingSet") {
+    if (inherits(fr_source, "GatingSet")) {
       fr <- try(flowWorkspace::gh_pop_get_data(
         fr_source[[which(sample_name == sample)]]
       ))
-    } else if (class(fr_source) == "character") {
+    } else if (is.character(fr_source)) {
       fr <- purrr::map(fr_source, function(fr_source_curr) {
         fr_path <- file.path(fr_source_curr, sample)
         if (!file.exists(fr_path)) {
@@ -303,7 +299,7 @@ faust_fcs_write <- function(project_path,
       fr <- fr[[1]]
     }
 
-    if (class(fr) == "try-error") {
+    if (inherits(fr, "try-error")) {
       print(sample_name)
       print(sample)
       stop(paste0("error in loading sample", sample))
@@ -353,7 +349,7 @@ faust_fcs_write <- function(project_path,
     }
 
     # update flowFrame
-    if (class(fr) == "cytoframe") {
+    if (inherits(fr, "cytoframe")) {
       fr <- flowWorkspace::cytoframe_to_flowFrame(fr)
     }
     flowCore::exprs(fr) <- ex

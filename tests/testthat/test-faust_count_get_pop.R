@@ -1,5 +1,5 @@
 test_that("get_pop_counts works", {
-  dir_proj <- usethis::proj_path("./tests/testthat")
+  dir_proj <- testthat::test_path()
 
   full_tbl <- faust_count_get_pop(dir_proj)
   cd4p_tbl <- faust_count_get_pop(
