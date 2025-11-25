@@ -185,7 +185,8 @@ faust_fcs_write(
 If your data was transformed before FAUST analysis, you can back-transform
 when exporting:
 ```{r}
-# Inverse hyperbolic sine back-transformation
+# Back-transform data that was asinh-transformed
+# (sinh is the inverse of asinh)
 faust_fcs_write(
   project_path = project_path,
   pop = c("CD3" = "+", "CD4" = "+"),
