@@ -82,3 +82,36 @@ The package provides additional functions to extract and plot FAUST (Functional 
 19. Always validate that the specified markers exist in the FAUST output before processing.
 20. When working with GatingSets, ensure proper handling of sample names and indices.
 21. FCS file outputs should maintain the original marker names and expression values unless explicitly transformed.
+
+## Maintaining Copilot Instructions
+
+When updating copilot instructions, follow GitHub's best practices:
+
+- Keep it concise - Files under 1000 lines (ideally under 250)
+- Structure matters - Use headings, bullets, clear sections
+- Be direct - Short, imperative rules over long paragraphs
+- Show examples - Include code samples (correct and incorrect patterns)
+- No external links - Copilot won't follow them; copy info instead
+- No vague language - Avoid "be more accurate", "identify all issues", etc.
+- Path-specific - Use `applyTo` frontmatter in topic files
+
+### Code Quality
+
+- Make minimal, surgical changes to fix issues
+- Maintain backward compatibility when possible
+- Follow existing patterns in the codebase
+- Add tests for new functionality or bug fixes
+- Never leave trailing whitespace at the end of lines or on blank lines
+- Always add a blank line between headings (ending with `**`) and bullet points
+
+### Before Committing
+
+- Run `devtools::document()` to update documentation
+- Run `devtools::test()` with LITE mode for faster iteration
+- Run `devtools::check()` to ensure package passes R CMD check
+
+### Package Structure
+
+- `R/` - Source code (use `.` prefix for internal functions)
+- `tests/testthat/` - Tests (use helper functions from `helper-*.R`)
+- `man/` - Auto-generated docs (DO NOT edit directly)

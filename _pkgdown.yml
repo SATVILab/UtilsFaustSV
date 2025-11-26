@@ -1,0 +1,27 @@
+url: https://satvilab.github.io/UtilsFaustSV/
+
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left: [intro, reference, articles]
+    right: [search, github]
+
+reference:
+- title: Writing FCS Files
+  desc: Export FAUST-identified populations to FCS files
+  contents:
+  - faust_fcs_write
+
+- title: Population Counts
+  desc: Get and visualize counts of FAUST populations
+  contents:
+  - faust_count_get
+  - faust_count_get_pop
+  - faust_count_plot
+
+- title: Marker Information
+  desc: Get information about markers used by FAUST
+  contents:
+  - faust_marker_get_usage
