@@ -6,10 +6,13 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/SATVILab/UtilsFaustSV/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SATVILab/UtilsFaustSV/actions/workflows/R-CMD-check.yaml)
+[![pkgdown](https://github.com/SATVILab/UtilsFaustSV/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/SATVILab/UtilsFaustSV/actions/workflows/pkgdown.yaml)
 [![test-coverage](https://github.com/SATVILab/UtilsFaustSV/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/SATVILab/UtilsFaustSV/actions/workflows/test-coverage.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/SATVILab/UtilsFaustSV/graph/badge.svg)](https://app.codecov.io/gh/SATVILab/UtilsFaustSV)
 <!-- badges: end -->
+
+**Documentation**: <https://satvilab.github.io/UtilsFaustSV/>
 
 ## Overview
 

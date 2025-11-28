@@ -110,6 +110,25 @@ When updating copilot instructions, follow GitHub's best practices:
 - Run `devtools::test()` with LITE mode for faster iteration
 - Run `devtools::check()` to ensure package passes R CMD check
 
+### Maintaining pkgdown References
+
+When adding, removing, or modifying exported functions:
+
+- Update `_pkgdown.yml` to include any new exported functions in the appropriate section
+- Remove references to deleted functions from `_pkgdown.yml`
+- Keep functions organized by their purpose (Writing FCS Files, Population Counts, Marker Information)
+- Verify the website builds locally with `pkgdown::build_site()` after changes
+
+The `_pkgdown.yml` file structure:
+
+```yaml
+reference:
+- title: Section Title
+  desc: Section description
+  contents:
+  - function_name
+```
+
 ### Package Structure
 
 - `R/` - Source code (use `.` prefix for internal functions)
