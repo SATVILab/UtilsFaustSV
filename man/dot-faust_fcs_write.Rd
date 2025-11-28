@@ -70,3 +70,4 @@ expression matrix. Default is \code{NULL}.}
 \description{
 Save FAUST subset as an FCS file
 }
+\keyword{internal}

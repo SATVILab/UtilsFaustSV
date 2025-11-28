@@ -271,6 +271,7 @@ faust_fcs_write <- function(project_path,
 #' in which they are found in \code{gs}.
 #'
 #' @return \code{invisible(TRUE)}.
+#' @keywords internal
 .faust_fcs_write <- function(project_path,
                              fr_source,
                              sample_name,

@@ -19,3 +19,4 @@ e.g. c("CD4" = "-", "CD8" = "+").}
 \description{
 Get indices of columns that have a specified annotation
 }
+\keyword{internal}

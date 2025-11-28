@@ -238,6 +238,7 @@ faust_count_plot <- function(project_path,
 
 
 #' @title Create inverse hyperbolic sin transformation object
+#' @keywords internal
 trans_asinh <- scales::trans_new(
   "trans_asinh",
   function(x) asinh(x),
@@ -252,6 +253,7 @@ trans_asinh <- scales::trans_new(
 #' e.g. c("CD4" = "-", "CD8" = "+").
 #'
 #' @return \code{Integer vector}.
+#' @keywords internal
 .get_pop_match_ind <- function(data, pop) {
   pop_search_vec <- .collapse_pop(pop = pop, search = TRUE)
   purrr::map_lgl(colnames(data), function(pop_curr) {
