@@ -13,4 +13,4 @@ trans_asinh
 \description{
 Create inverse hyperbolic sin transformation object
 }
-\keyword{datasets}
+\keyword{internal}
