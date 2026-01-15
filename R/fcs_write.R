@@ -248,10 +248,37 @@ faust_fcs_write <- function(project_path,
   # Save FAUST pops
   # =============================
 
+# sample_name_vec_edit <- function(name){
+#   # split by '_'
+#   splt <- strsplit(name, split = "_")[[1]]
+#   # take elements 2 and 4
+#   # remove A from element 2
+#   e2 <- gsub("A", "", splt[2])
+#   # remove " (control)" from element 4
+#   e4 <- strsplit(splt[4], split = " ")[[1]][1]
+#   return(paste0(e2, "_", e4))
+# }
+
+# sel_sample_vec_edit <- function(name){
+#   # split by '_'
+#   splt <- strsplit(name, split = "_")[[1]]
+#   # take elements 2 and 4
+#   e2 <- splt[2]
+#   # remove spaces from element 4, and convert to upper case
+#   e4 <- gsub(" ", "", splt[4]) |> toupper()
+#   return(paste0(e2, "_", e4))
+# }
+
+#   sample_name_vec <- sapply(sample_name_vec, FUN = sample_name_vec_edit)
+#   sel_sample_vec  <- sapply(sel_sample_vec, FUN = sel_sample_vec_edit)
+
+#   sample_name_vec[grepl("13AUG2015", sample_name_vec)]
+#   sel_sample_vec[grepl("13AUG2015", sel_sample_vec)]
+
   .faust_fcs_write(
     project_path = project_path, fr_source = fr_source,
-    sample_name = sample_name_vec,
-    sel_sample = sel_sample_vec,
+    sample_name = sample_name_vec, # gatingset names here 
+    sel_sample = sel_sample_vec, # faustData/sampleData names here
     pop = pop,
     dir_save = dir_save,
     trans_fn = trans_fn,
