@@ -26,6 +26,7 @@ using only a subset of the markers that FAUST used. This allows you to:
 ## Setup
 
 ``` r
+
 library(UtilsFaustSV)
 
 # Set the path to your FAUST project directory
@@ -55,6 +56,7 @@ First, it’s useful to understand which markers FAUST used and how many
 expression levels it identified for each:
 
 ``` r
+
 # Get markers and their levels
 markers <- faust_marker_get_usage(project_path = project_path)
 print(markers)
@@ -74,6 +76,7 @@ The most common way to define a population is using a named character
 vector where names are markers and values are expression levels:
 
 ``` r
+
 # CD3+CD4+ cells
 pop_cd4 <- c("CD3" = "+", "CD4" = "+")
 
@@ -96,6 +99,7 @@ For markers with more than 2 levels, you can use descriptive levels:
 You can also use numeric levels (1 = lowest, 2 = next, etc.):
 
 ``` r
+
 # Equivalent to c("CD3" = "+", "CD4" = "+")
 pop_cd4_numeric <- c("CD3" = 2, "CD4" = 2)
 ```
@@ -105,6 +109,7 @@ pop_cd4_numeric <- c("CD3" = 2, "CD4" = 2)
 Use a list to define multiple populations:
 
 ``` r
+
 # Both CD4+ and CD8+ T cells
 pop_both <- list(
   c("CD3" = "+", "CD4" = "+", "CD8-IgD" = "-"),
@@ -119,6 +124,7 @@ The
 function exports cells matching a population definition to FCS files:
 
 ``` r
+
 # You need the original GatingSet that FAUST used
 # gs <- flowWorkspace::load_gs("/path/to/gatingset")
 
@@ -136,6 +142,7 @@ faust_fcs_write(
 ### Custom Output Directory
 
 ``` r
+
 faust_fcs_write(
   project_path = project_path,
   pop = c("CD3" = "+", "CD4" = "+"),
@@ -147,6 +154,7 @@ faust_fcs_write(
 ### Exporting Specific Samples
 
 ``` r
+
 # By sample name
 faust_fcs_write(
   project_path = project_path,
@@ -170,6 +178,7 @@ If your data was transformed before FAUST analysis, you can
 back-transform when exporting:
 
 ``` r
+
 # Back-transform data that was asinh-transformed
 # (sinh is the inverse of asinh)
 faust_fcs_write(
@@ -187,6 +196,7 @@ faust_fcs_write(
 Get the full FAUST count matrix:
 
 ``` r
+
 counts <- faust_count_get(project_path = project_path)
 ```
 
@@ -195,6 +205,7 @@ counts <- faust_count_get(project_path = project_path)
 Get counts for populations matching a definition:
 
 ``` r
+
 # Get counts for all CD3+CD4+ subsets
 cd4_counts <- faust_count_get_pop(
   project_path = project_path,
@@ -210,6 +221,7 @@ and classified counts - Counts for each matching population subset
 When using a list of populations, counts are summed:
 
 ``` r
+
 # Get summed counts for T cell subsets
 t_cell_counts <- faust_count_get_pop(
   project_path = project_path,
@@ -226,6 +238,7 @@ By default, FAUST filters out rare populations. To include all
 populations:
 
 ``` r
+
 all_counts <- faust_count_get_pop(
   project_path = project_path,
   pop = c("CD3" = "+", "CD4" = "+"),
@@ -240,6 +253,7 @@ The
 function creates box plots of population frequencies:
 
 ``` r
+
 # Plot all CD4+ T cell subsets
 faust_count_plot(
   project_path = project_path,
@@ -253,6 +267,7 @@ Plots are saved to:
 ### Customizing Plots
 
 ``` r
+
 faust_count_plot(
   project_path = project_path,
   pop = c("CD3" = "+", "CD4" = "+"),
@@ -268,6 +283,7 @@ faust_count_plot(
 Here’s a complete workflow for extracting and analyzing a T cell subset:
 
 ``` r
+
 library(UtilsFaustSV)
 
 # Set paths
@@ -309,10 +325,11 @@ faust_fcs_write(
 ## Session Info
 
 ``` r
+
 sessionInfo()
-#> R version 4.5.2 (2025-10-31)
+#> R version 4.6.1 (2026-06-24)
 #> Platform: x86_64-pc-linux-gnu
-#> Running under: Ubuntu 24.04.3 LTS
+#> Running under: Ubuntu 24.04.4 LTS
 #> 
 #> Matrix products: default
 #> BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
@@ -332,12 +349,13 @@ sessionInfo()
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] digest_0.6.39       desc_1.4.3          R6_2.6.1           
-#>  [4] fastmap_1.2.0       xfun_0.54           cachem_1.1.0       
-#>  [7] knitr_1.50          htmltools_0.5.8.1   rmarkdown_2.30     
-#> [10] lifecycle_1.0.4     cli_3.6.5           sass_0.4.10        
-#> [13] pkgdown_2.2.0       textshaping_1.0.4   jquerylib_0.1.4    
-#> [16] renv_1.0.3          systemfonts_1.3.1   compiler_4.5.2     
-#> [19] tools_4.5.2         ragg_1.5.0          bslib_0.9.0        
-#> [22] evaluate_1.0.5      yaml_2.3.11         BiocManager_1.30.27
-#> [25] jsonlite_2.0.0      rlang_1.1.6         fs_1.6.6
+#>  [4] fastmap_1.2.0       xfun_0.60           cachem_1.1.0       
+#>  [7] knitr_1.51          htmltools_0.5.9     rmarkdown_2.31     
+#> [10] lifecycle_1.0.5     cli_3.6.6           sass_0.4.10        
+#> [13] pkgdown_2.2.1       textshaping_1.0.5   jquerylib_0.1.4    
+#> [16] renv_1.0.3          systemfonts_1.3.2   compiler_4.6.1     
+#> [19] tools_4.6.1         ragg_1.5.2          bslib_0.12.0       
+#> [22] evaluate_1.0.5      yaml_2.3.12         otel_0.2.0         
+#> [25] BiocManager_1.30.27 jsonlite_2.0.0      rlang_1.3.0        
+#> [28] fs_2.1.0
 ```

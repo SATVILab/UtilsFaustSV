@@ -25,29 +25,32 @@ FAUST-identified cell populations, including:
 You can install the package from [GitHub](https://github.com/) with:
 
 ``` r
+
 if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
 remotes::install_github("SATVILab/UtilsFaustSV")
 ```
 
 ## Key Functions
 
-| Function                                                                                                  | Description                                     |
-|-----------------------------------------------------------------------------------------------------------|-------------------------------------------------|
-| [`faust_fcs_write()`](https://satvilab.github.io/UtilsFaustSV/reference/faust_fcs_write.md)               | Write FAUST-identified populations to FCS files |
-| [`faust_count_get()`](https://satvilab.github.io/UtilsFaustSV/reference/faust_count_get.md)               | Get raw count matrix from FAUST output          |
-| [`faust_count_get_pop()`](https://satvilab.github.io/UtilsFaustSV/reference/faust_count_get.md)           | Get counts for specific population definitions  |
-| [`faust_count_plot()`](https://satvilab.github.io/UtilsFaustSV/reference/faust_count_plot.md)             | Plot counts of FAUST populations                |
-| [`faust_marker_get_usage()`](https://satvilab.github.io/UtilsFaustSV/reference/faust_marker_get_usage.md) | Get markers and levels used by FAUST            |
+| Function | Description |
+|----|----|
+| [`faust_fcs_write()`](https://satvilab.github.io/UtilsFaustSV/reference/faust_fcs_write.md) | Write FAUST-identified populations to FCS files |
+| [`faust_count_get()`](https://satvilab.github.io/UtilsFaustSV/reference/faust_count_get.md) | Get raw count matrix from FAUST output |
+| [`faust_count_get_pop()`](https://satvilab.github.io/UtilsFaustSV/reference/faust_count_get.md) | Get counts for specific population definitions |
+| [`faust_count_plot()`](https://satvilab.github.io/UtilsFaustSV/reference/faust_count_plot.md) | Plot counts of FAUST populations |
+| [`faust_marker_get_usage()`](https://satvilab.github.io/UtilsFaustSV/reference/faust_marker_get_usage.md) | Get markers and levels used by FAUST |
 
 ## Example Usage
 
 ``` r
+
 library(UtilsFaustSV)
 ```
 
 First, set the path to the FAUST project directory:
 
 ``` r
+
 # set the FAUST project path
 proj_path <- usethis::proj_path("tests/testthat")
 #> ✔ Setting active project to "/home/runner/work/UtilsFaustSV/UtilsFaustSV".
@@ -59,6 +62,7 @@ Retrieve the markers FAUST used for clustering and the number of
 expression levels for each marker:
 
 ``` r
+
 faust_marker_get_usage(project_path = proj_path)
 #>         CD33          CD7         CCR7      CD8-IgD HLA-DR-beads         CD14 
 #>            2            2            2            2            2            2 
@@ -75,6 +79,7 @@ can be defined using only a subset of markers, enabling extraction of
 broader cell types:
 
 ``` r
+
 # Export CD3+CD4+ cells (defined by any number of levels of other markers)
 faust_fcs_write(
   project_path = proj_path,
@@ -98,6 +103,7 @@ faust_fcs_write(
 Extract counts of cells matching specific population definitions:
 
 ``` r
+
 # Get counts for all subsets matching an annotation
 faust_count_get_pop(
   project_path = proj_path,
@@ -119,6 +125,7 @@ faust_count_get_pop(
 Create visualizations of population frequencies:
 
 ``` r
+
 # Plot all subsets matching an annotation
 faust_count_plot(
   project_path = proj_path,
