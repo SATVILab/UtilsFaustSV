@@ -6,7 +6,9 @@ test_that("faust_marker_get_usage works", {
     "CD33", "CD7", "CCR7", "CD8-IgD", "HLA-DR-beads", "CD14", "CD27",
     "CD4", "CD16", "CD20", "TCRgd-CD19", "CD3", "CD45RA", "CXCR5"
   )
-  expect_identical(
-    marker_nlevel_vec, stats::setNames(rep(2, length(marker_vec)), marker_vec)
+  expected <- stats::setNames(rep(2, length(marker_vec)), marker_vec)
+  expect_identical( # order doesn't matter, contents does
+    marker_nlevel_vec[order(names(marker_nlevel_vec))],
+    expected[order(names(expected))]
   )
 })

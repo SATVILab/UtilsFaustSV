@@ -46,6 +46,7 @@
 #' faust_count_get_pop(project_path = "/path/to/project", pop = pop)
 #' }
 #' @export
+# faust_count_get_pop(data = mat, pop = lineages[[lineage]][[2]][[1]], simplify_names = FALSE)
 faust_count_get_pop <- function(project_path = NULL,
                                 data = NULL,
                                 pop = NULL,
@@ -148,7 +149,7 @@ faust_count_get_pop <- function(project_path = NULL,
     # select only columns found to match annotation set
     data_resp <- data[, pop_col_ind_vec, drop = FALSE]
     # rename columns as per above
-    colnames(data_resp) <- pop_col_name_vec
+    if(simplify_names){colnames(data_resp) <- pop_col_name_vec}
     # join dem columns to response columns
     data_out <- dplyr::bind_cols(data_dem, data_resp)
     return(data_out)
@@ -189,3 +190,4 @@ faust_count_get <- function(project_path, exhaustive = FALSE) {
   )
   readRDS(path_mat)
 }
+
